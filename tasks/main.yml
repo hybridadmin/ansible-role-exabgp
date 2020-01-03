@@ -1,1 +1,4 @@
 --
+- include: python.yml
+
+- include: install.yml
