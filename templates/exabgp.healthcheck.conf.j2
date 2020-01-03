@@ -1,0 +1,20 @@
+name = {{ process_name }}
+withdraw-on-down
+dynamic-ip-setup
+interval = 10
+label = {{ process_name }}
+{% for instance in instances if instance.name == ansible_hostname %}
+start-ip = {{ instance.start_ip }}
+{% else %}
+start-ip = 0
+{% endfor %}
+{% for anycast_cidr in anycast_cidrs %}
+ip = {{ anycast_cidr }}
+{% endfor %}
+up-metric = 100
+increase = 100
+command = {{ test_cmd }}
+{% if community_list is defined %}
+community = {{ community_list }}
+{% endif %}
+disable = /var/healthcheck/{{ process_name }}.disable
