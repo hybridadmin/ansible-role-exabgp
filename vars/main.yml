@@ -9,10 +9,12 @@ exabgp_svc_path: "/etc/systemd/system/exabgp.service"
 
 exabgp_templates:
   - { src: 'exabgp.conf.j2', dest: "{{ exabgp_config_path }}", owner: "nobody", group: "nobody", mode: "0600" }
-  - { src: 'exabgp.healthcheck.conf.j2', dest: "{{ exabgp_healthcheck_path }}", owner: "nobody", group: "nobody", mode: "0754" }
   - { src: 'exabgp.service.j2', dest: "{{ exabgp_svc_path }}", owner: "nobody", group: "nobody", mode: "0600" }
 
 healthcheck_dirs:
   - { name: "/var/healthcheck", perms: "0755" }
-  
+
+healthcheck_templates:
+  - { src: 'exabgp.healthcheck.conf.j2', dest: "{{ exabgp_healthcheck_path }}", owner: "nobody", group: "nobody", mode: "0754" }
+
 exabgp_healthcheck_path: "/var/healthcheck/healthcheck.conf"
