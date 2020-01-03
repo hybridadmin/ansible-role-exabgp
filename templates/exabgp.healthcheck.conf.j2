@@ -3,8 +3,8 @@ withdraw-on-down
 dynamic-ip-setup
 interval = 10
 label = {{ process_name }}
-{% for instance in instances if instance.name == ansible_hostname %}
-start-ip = {{ instance.start_ip }}
+{% for instance in hostvars if hostvars[host] == ansible_hostname %}
+start-ip = 1
 {% else %}
 start-ip = 0
 {% endfor %}
