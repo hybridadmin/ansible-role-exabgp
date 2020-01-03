@@ -1,0 +1,88 @@
+- name: "install and configure exabgp"
+  block:
+  - name: "exabgp: disable arp check"
+    sysctl:
+      name: net.ipv4.conf.all.arp_filter
+      value: "1"
+      state: present
+      reload: yes
+    ignore_errors: yes
+
+  - name: "exabgp: configure router advertisements ipv6"
+    sysctl:
+      name: "net.ipv6.conf.{{ item }}.accept_ra"
+      value: "0"
+      state: present
+      reload: yes
+    loop: "{{ ansible_interfaces }}"
+    when:
+    - not item | regex_search('lo' | string)
+    - hostvars[inventory_hostname]['ansible_'~item]['ipv4'] is defined
+    ignore_errors: yes
+  
+  - name: "exabgp: install from pip"
+    pip:
+      name: exabgp
+      executable: pip3.6
+    ignore_errors: '{{ ansible_check_mode }}'
+
+  - name: "exabgp: checking directories exist"
+    stat:
+      path: "{{ item }}"
+    register: folder_stats
+    loop: "{{ exabgp_dirs }}"
+
+  - name: "exabgp: creating required directories"
+    file:
+      path: "{{ item.item.name }}"
+      state: directory
+      mode: "{{ item.item.perms }}"
+      group: root
+      owner: root
+    when: not item.stat.exists
+    loop: "{{ folder_stats.results }}"
+
+  - name: "template: create configuration files and service"        
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ item.owner }}"
+      group: "{{ item.group }}"
+      mode: "{{ item.mode }}"
+    loop:
+    - "{{ exabgp_templates }}"
+    when: 
+    - not ansible_check_mode
+
+  - name: "exabgp: generate environment configuration"
+    command: exabgp --fi > {{ exabgp_env_path }}
+    become: yes
+    
+  - name: "exabgp: add loopback device fix"
+    lineinfile:
+      create: yes
+      path: /etc/sudoers.d/exabgp
+      state: present
+      mode: 0440
+      regexp: '^nobody ALL='
+      line: 'nobody ALL= NOPASSWD: /sbin/ip'
+      validate: /usr/sbin/visudo -cf %s
+    when: not ansible_check_mode
+
+  - name: "exabgp: test configuration"
+    command: exabgp --test "{{ exabgp_config_path }}"
+    register: exabgp_test
+    ignore_errors: yes
+      
+  - name: "exabgp: start service"
+    systemd:
+      state: started
+      daemon_reload: yes
+      name: exabgp
+      enabled: yes
+    when: 
+    - not ansible_check_mode
+    - exabgp_test.rc == 0
+    ignore_errors: '{{ ansible_check_mode }}'
+      
+  when: '"not found" not in pip_installed_version.stderr'
