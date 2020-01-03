@@ -2,9 +2,6 @@ python3_command: python3.6
 pip3_command: pip3.6
 python3_pyenv: null
 
-instances:
-  - { name: "dnscache-rec01", start_ip: 0 }
-  - { name: "dnscache-rec02", start_ip: 1 }
 bgp_neighbors:
   - ip: 10.220.50.10
     desc: "cr2"
