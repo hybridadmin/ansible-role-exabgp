@@ -3,11 +3,7 @@ withdraw-on-down
 dynamic-ip-setup
 interval = 10
 label = {{ process_name }}
-{% for instance in play_hosts if instance.index(inventory_hostname) is even %}
-start-ip = 1
-{% else %}
 start-ip = 0
-{% endfor %}
 {% for anycast_cidr in anycast_cidrs %}
 ip = {{ anycast_cidr }}
 {% endfor %}
