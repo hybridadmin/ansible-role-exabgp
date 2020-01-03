@@ -1,3 +1,5 @@
+if_name: "eth1"
+
 exabgp_dirs:
   - { name: "/etc/exabgp", perms: "0754" }
   - { name: "/var/healthcheck", perms: "0755" }
