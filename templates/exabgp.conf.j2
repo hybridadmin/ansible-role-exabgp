@@ -1,0 +1,35 @@
+process {{ process_name }} {
+        run python3 -m exabgp healthcheck --sudo --config {{ exabgp_healthcheck_path }};
+        encoder json;
+}
+
+template {
+        neighbor controller {
+                local-as {{ local_as }};
+                peer-as {{ remote_as }};
+                hold-time 180;
+                group-updates false;
+                        capability {
+                                graceful-restart 1200;
+                        }
+
+                        family {
+                                ipv4 unicast;
+                        }
+
+                        api {
+                                processes [ {{ process_name }} ];
+                                neighbor-changes;
+                        }
+        }
+}
+
+{% for bgp_neighbor in bgp_neighbors %}
+neighbor {{ bgp_neighbor.ip }} {
+        inherit controller;
+        description "{{ bgp_neighbor.desc }}";
+{% for iface in ansible_interfaces if if_name == iface %}
+        local-address {{ hostvars[inventory_hostname]['ansible_%s'|format(iface)]['ipv4']['address'] }};
+{% endfor %}
+}
+{% endfor %}
