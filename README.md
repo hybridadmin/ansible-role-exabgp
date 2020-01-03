@@ -15,6 +15,7 @@ This role uses https://github.com/Exa-Networks/exabgp
 
 ##### Basic example
 
+```yaml
 instances:
   - { name: "dnscache-rec01", start_ip: 0 }
   - { name: "dnscache-rec02", start_ip: 1 }
@@ -28,6 +29,7 @@ community_list: "65359:500 65359:5000"
 anycast_cidrs:
   - 10.220.59.188/32
   - 10.220.59.189/32
+```
 
 #### Author Information
 
