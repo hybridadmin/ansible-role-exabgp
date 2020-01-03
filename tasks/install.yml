@@ -8,7 +8,7 @@
       reload: yes
     ignore_errors: yes
 
-  - name: "exabgp: configure router advertisements ipv6"
+  - name: "exabgp: configure router advertisements"
     sysctl:
       name: "net.ipv6.conf.{{ item }}.accept_ra"
       value: "0"
