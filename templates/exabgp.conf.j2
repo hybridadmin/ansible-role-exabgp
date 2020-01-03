@@ -1,7 +1,9 @@
+{% if use_healthcheck is sameas true %}
 process {{ process_name }} {
         run python3 -m exabgp healthcheck --sudo --config {{ exabgp_healthcheck_path }};
         encoder json;
 }
+{% endif %}
 
 template {
         neighbor controller {
@@ -17,10 +19,12 @@ template {
                                 ipv4 unicast;
                         }
 
+{% if use_healthcheck is sameas true %}
                         api {
                                 processes [ {{ process_name }} ];
                                 neighbor-changes;
                         }
+{% endif %}
         }
 }
 
