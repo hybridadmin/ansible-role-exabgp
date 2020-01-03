@@ -2,7 +2,6 @@ if_name: "eth0"
 
 exabgp_dirs:
   - { name: "/etc/exabgp", perms: "0754" }
-  - { name: "/var/healthcheck", perms: "0755" }
 
 exabgp_env_path: "/etc/exabgp/exabgp.env"
 exabgp_config_path: "/etc/exabgp/exabgp.conf"
