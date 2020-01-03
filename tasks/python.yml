@@ -12,7 +12,7 @@
   
   - name: "python3: install packages"
     become: true
-    yum:
+    package:
       name: "{{ package_list }}"
       state: present
 
