@@ -23,7 +23,7 @@
   - name: "exabgp: install from pip"
     pip:
       name: exabgp
-      executable: pip3.6
+      executable: {{ pip3_command }}
     ignore_errors: '{{ ansible_check_mode }}'
 
   - name: "exabgp: checking directories exist"
