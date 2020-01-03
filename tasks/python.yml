@@ -1,0 +1,42 @@
+- name: "install and configure python3"
+  block:
+  - name: set python package list
+    set_fact:
+      package_list: ['python36', 'python36-libs', 'python36-devel', 'python36-pip']
+    when: (ansible_os_family == 'RedHat' and ansible_distribution_major_version == "7")
+  
+  - name: set python package list
+    set_fact:
+      package_list: ['python3', 'python3-pip']
+    when: (ansible_os_family == 'RedHat' and ansible_distribution_major_version == "8")
+  
+  - name: "python3: install packages"
+    become: true
+    yum:
+      name: "{{ package_list }}"
+      state: present
+
+  - name: "python3: get python executable"
+    shell: "which {{ python3_command }}"
+    register: python3_which
+
+  - name: "python3: install pip"
+    become: true
+    command: "{{ python3_command }} -m ensurepip"
+
+  - name: "python3: link executable"
+    become: true
+    file:
+      src: "{{ python3_which.stdout }}"
+      dest: "{{ python3_which.stdout|dirname }}/python3"
+      state: link
+    when: 
+    - (ansible_os_family == 'RedHat' and ansible_distribution_major_version == "7")
+    - python3_pyenv == None
+    - not ansible_check_mode
+    
+  - name: "python3: get pip executable"
+    shell: "{{ pip3_command }} --version | awk '{print $2}'"
+    register: pip_installed_version
+    changed_when: false
+    check_mode: no
