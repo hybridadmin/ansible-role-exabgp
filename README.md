@@ -6,7 +6,6 @@ This role uses https://github.com/Exa-Networks/exabgp
 
 ##### General
 
-* `instances`: [optional]: list of instances exabgp is to be installed on
 * `bgp_neighbors`: [optional]: List of bgp neighbors to advertise prefixes to
 * `community_list`: [optional]: communities to be used when advertising prefixes
 * `anycast_cidrs`: [optional]: list of anycast cidrs to be advertised via bgp
@@ -15,11 +14,7 @@ This role uses https://github.com/Exa-Networks/exabgp
 
 ##### Basic example
 
-```yaml
-instances:
-  - { name: "dnscache-rec01", start_ip: 0 }
-  - { name: "dnscache-rec02", start_ip: 1 }
-  
+```yaml 
 bgp_neighbors:
   - ip: 10.220.50.10
     desc: "cr2"
