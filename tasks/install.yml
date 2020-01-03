@@ -30,7 +30,7 @@
     stat:
       path: "{{ item }}"
     register: folder_stats
-    loop: "{{ exabgp_dirs }}"
+    loop: "{{ required_dirs }}"
 
   - name: "exabgp: creating required directories"
     file:
@@ -50,7 +50,7 @@
       group: "{{ item.group }}"
       mode: "{{ item.mode }}"
     loop:
-    - "{{ exabgp_templates }}"
+    - "{{ required_tpls }}"
     when: 
     - not ansible_check_mode
 
