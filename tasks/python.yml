@@ -23,6 +23,7 @@
   - name: "python3: install pip"
     become: true
     command: "{{ python3_command }} -m ensurepip"
+    when: ansible_os_family == 'RedHat'
 
   - name: "python3: link executable"
     become: true
