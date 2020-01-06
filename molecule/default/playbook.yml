@@ -3,6 +3,9 @@
   hosts: all
   remote_user: root
   any_errors_fatal: true
+  
+  vars:
+    use_healthcheck: false
 
   pre_tasks:
     - name: Update apt cache.
