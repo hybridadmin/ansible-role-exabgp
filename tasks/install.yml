@@ -68,7 +68,7 @@
       regexp: '^nobody ALL='
       line: 'nobody ALL= NOPASSWD: /sbin/ip'
       validate: /usr/sbin/visudo -cf %s
-    when: not ansible_check_mode
+    when: not ansible_check_mode and ansible_connection != "docker"
 
   - name: "exabgp: test configuration"
     command: exabgp --test "{{ exabgp_config_path }}"
