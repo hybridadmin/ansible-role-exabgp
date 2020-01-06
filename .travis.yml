@@ -3,7 +3,6 @@
 language: python
 
 env:
-  global: MOLECULE_DEBUG="true"
   - distribution: centos
     version: 7
 #  - distribution: centos
