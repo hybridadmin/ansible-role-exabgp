@@ -1,6 +1,13 @@
 ---
 
 language: python
+
+env:
+  - distribution: centos
+    version: 7
+  - distribution: ubuntu
+    version: bionic
+
 services: docker
 
 install:
