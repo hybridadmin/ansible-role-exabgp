@@ -1,4 +1,6 @@
 ---
+- name: Load in project specific vars
+  include_vars: "../vars/main.yml"
 
 - name: exabgp set required directories
   set_fact:
