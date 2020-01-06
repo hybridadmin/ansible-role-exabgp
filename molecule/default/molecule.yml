@@ -8,7 +8,7 @@ lint:
 #  options:
 #    config-file: molecule/default/yaml-lint.yml
 platforms:
-  - name: ansible-role-exabgp-${distribution}${version}
+  - name: ansible-role-exabgp-${distribution}-${version}
     image: ${distribution}:${version}
     dockerfile: files/Dockerfile.${distribution}-${version}
 provisioner:
