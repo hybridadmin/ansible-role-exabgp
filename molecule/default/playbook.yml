@@ -12,7 +12,7 @@
     bgp_neighbors:
       - ip: 192.168.50.10
         desc: "cr2"
-        
+
   pre_tasks:
     - name: Update apt cache.
       apt: update_cache=yes cache_valid_time=600
