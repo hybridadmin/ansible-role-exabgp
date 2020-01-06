@@ -23,7 +23,7 @@
   - name: "exabgp: install from pip"
     pip:
       name: exabgp
-      executable: {{ pip3_command }}
+      executable: "{{ pip3_command }}"
     ignore_errors: '{{ ansible_check_mode }}'
 
   - name: "exabgp: checking directories exist"
@@ -55,7 +55,7 @@
     - not ansible_check_mode
 
   - name: "exabgp: generate environment configuration"
-    command: exabgp --fi > {{ exabgp_env_path }}
+    command: exabgp --fi > "{{ exabgp_env_path }}"
     become: yes
     
   - name: "exabgp: add loopback device fix"
