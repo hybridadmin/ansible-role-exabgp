@@ -32,8 +32,6 @@ template {
 neighbor {{ bgp_neighbor.ip }} {
         inherit controller;
         description "{{ bgp_neighbor.desc }}";
-{% for iface in ansible_interfaces if if_name == iface %}
-        local-address {{ hostvars[inventory_hostname]['ansible_%s'|format(iface)]['ipv4']['address'] }};
-{% endfor %}
+        local-address {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }};
 }
 {% endfor %}
