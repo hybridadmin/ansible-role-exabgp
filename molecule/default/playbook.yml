@@ -12,6 +12,8 @@
     bgp_neighbors:
       - ip: 192.168.50.10
         desc: "cr2"
+    local_as: 65340
+    remote_as: 65359
 
   pre_tasks:
     - name: Update apt cache.
