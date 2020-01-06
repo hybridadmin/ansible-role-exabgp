@@ -10,13 +10,7 @@ lint:
 platforms:
   - name: ansible-role-exabgp-${distribution}${version}
     image: ansible/${distribution}${version}-ansible:stable
-    override_command: false
-    privileged: true
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    tmpfs:
-      - /tmp
-      - /run
+    dockerfile: files/Dockerfile.${distribution}-${version}
 provisioner:
   name: ansible
   log: true
