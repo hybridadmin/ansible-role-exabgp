@@ -42,6 +42,9 @@
     when: not item.stat.exists
     loop: "{{ folder_stats.results }}"
 
+  - name: Display all variables/facts known for a host
+    debug: var=hostvars[inventory_hostname]
+
   - name: "template: create configuration files and service"
     template:
       src: "{{ item.src }}"
