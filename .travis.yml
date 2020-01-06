@@ -1,34 +1,31 @@
 ---
 language: python
-services:
-  - docker
- 
-before_install:
-  - sudo apt-get -qq update
- 
+services: docker
+
 env:
   global:
     - ROLE_NAME: exabgp
   matrix:
-    - MOLECULE_DISTRO: centos:7
-#    - MOLECULE_DISTRO: fedora:27
-#    - MOLECULE_DISTRO: fedora:28
-#    - MOLECULE_DISTRO: ubuntu-upstart:trusty
-    - MOLECULE_DISTRO: ubuntu:xenial
-    - MOLECULE_DISTRO: ubuntu:bionic
-#    - MOLECULE_DISTRO: debian:jessie
-#    - MOLECULE_DISTRO: debian:stretch
- 
+    - MOLECULE_DISTRO: centos8
+    - MOLECULE_DISTRO: centos7
+    - MOLECULE_DISTRO: ubuntu1804
+    - MOLECULE_DISTRO: ubuntu1604
+    - MOLECULE_DISTRO: debian10
+    - MOLECULE_DISTRO: debian9
+
 install:
-  - pip install testinfra molecule docker
- 
-#before_script:
-#  - cd ../
-#  - mv ansible-role-$ROLE_NAME hybridadmin.$ROLE_NAME
-#  - cd hybridadmin.$ROLE_NAME
- 
+  # Install test dependencies.
+  - pip install molecule docker
+
+before_script:
+  # Use actual Ansible Galaxy role name for the project directory.
+  - cd ../
+  - mv ansible-role-$ROLE_NAME hybridadmin.$ROLE_NAME
+  - cd hybridadmin.$ROLE_NAME
+
 script:
+  # Run tests.
   - molecule test
- 
+
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
