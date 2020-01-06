@@ -9,7 +9,10 @@
     python3_command: python3
     pip3_command: pip3
     python3_pyenv: null
-
+    bgp_neighbors:
+      - ip: 192.168.50.10
+        desc: "cr2"
+        
   pre_tasks:
     - name: Update apt cache.
       apt: update_cache=yes cache_valid_time=600
