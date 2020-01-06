@@ -25,6 +25,7 @@
   - name: "python3: get python executable"
     command: "which {{ python3_command }}"
     register: python3_which
+    changed_when: False
 
   - name: "python3: install pip"
     become: true
