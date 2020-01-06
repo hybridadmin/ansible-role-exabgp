@@ -19,7 +19,7 @@
     - not item | regex_search('lo' | string)
     - hostvars[inventory_hostname]['ansible_'~item]['ipv4'] is defined
     ignore_errors: yes
-  
+
   - name: "exabgp: install from pip"
     pip:
       name: exabgp
@@ -42,7 +42,7 @@
     when: not item.stat.exists
     loop: "{{ folder_stats.results }}"
 
-  - name: "template: create configuration files and service"        
+  - name: "template: create configuration files and service"
     template:
       src: "{{ item.src }}"
       dest: "{{ item.dest }}"
@@ -51,13 +51,13 @@
       mode: "{{ item.mode }}"
     loop:
     - "{{ required_tpls }}"
-    when: 
+    when:
     - not ansible_check_mode
 
   - name: "exabgp: generate environment configuration"
     command: exabgp --fi > "{{ exabgp_env_path }}"
     become: yes
-    
+
   - name: "exabgp: add loopback device fix"
     lineinfile:
       create: yes
@@ -73,16 +73,16 @@
     command: exabgp --test "{{ exabgp_config_path }}"
     register: exabgp_test
     ignore_errors: yes
-      
+
   - name: "exabgp: start service"
     systemd:
       state: started
       daemon_reload: yes
       name: exabgp
       enabled: yes
-    when: 
+    when:
     - not ansible_check_mode
     - exabgp_test.rc == 0
     ignore_errors: '{{ ansible_check_mode }}'
-      
+
   when: '"not found" not in pip_installed_version.stderr'
