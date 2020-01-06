@@ -1,34 +1,16 @@
 ---
+
 language: python
 services: docker
 
-env:
-  global:
-    - ROLE_NAME: exabgp
-#    - MOLECULE_DEBUG: true
-  matrix:
-#    - MOLECULE_DISTRO: centos8
-    - MOLECULE_DISTRO: centos7
-      MOLECULE_PLAYBOOK: playbook-source-install.yml
-    - MOLECULE_DISTRO: ubuntu1804
-    - MOLECULE_DISTRO: ubuntu1604
-    - MOLECULE_DISTRO: ubuntu1404
-#    - MOLECULE_DISTRO: debian10
-#    - MOLECULE_DISTRO: debian9
-
 install:
-  # Install test dependencies.
-  - pip install molecule docker==4.1.0
+  - pip install molecule docker
 
 before_script:
-  # Use actual Ansible Galaxy role name for the project directory.
-  - cd ../
-  - mv ansible-role-$ROLE_NAME hybridadmin.$ROLE_NAME
-  - cd hybridadmin.$ROLE_NAME
+  - NAME=$(basename $(pwd)) ROLENAME=$(echo $NAME | sed -e s/ansible-//g) && cd .. &&  ln -fs $NAME $ROLENAME && cd $ROLENAME && pwd
 
 script:
-  # Run tests.
-  - molecule test
+  - TMPDIR=$(mktemp -d -t ci-XXXXXXXXXX) INSTANCE=$(basename $TMPDIR) molecule test
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
