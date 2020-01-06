@@ -1,4 +1,5 @@
---
+---
+
 - name: exabgp set required directories
   set_fact:
     required_dirs: "{{ exabgp_dirs }}"
