@@ -5,6 +5,7 @@ services: docker
 env:
   global:
     - ROLE_NAME: exabgp
+    - MOLECULE_DEBUG: true
   matrix:
 #    - MOLECULE_DISTRO: centos8
     - MOLECULE_DISTRO: centos7
