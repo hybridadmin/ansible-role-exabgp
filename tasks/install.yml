@@ -50,7 +50,7 @@
       src: "{{ item.src }}"
       dest: "{{ item.dest }}"
       owner: "{{ item.owner }}"
-      group: "{{ item.group }}"
+#      group: "{{ item.group }}"
       mode: "{{ item.mode }}"
     loop: "{{ required_tpls }}"
 #    when: not ansible_check_mode
