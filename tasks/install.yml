@@ -58,6 +58,7 @@
   - name: "exabgp: generate environment configuration"
     command: exabgp --fi > "{{ exabgp_env_path }}"
     become: yes
+    changed_when: False
 
   - name: "exabgp: add loopback device fix"
     lineinfile:
@@ -74,6 +75,7 @@
     command: exabgp --test "{{ exabgp_config_path }}"
     register: exabgp_test
     ignore_errors: yes
+    changed_when: False
 
   - name: "exabgp: start service"
     systemd:
