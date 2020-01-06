@@ -4,7 +4,7 @@
     set_fact:
       package_list: ['python36', 'python36-libs', 'python36-devel', 'python36-pip']
     when: (ansible_os_family == 'RedHat' and ansible_distribution_major_version == "7")
-  
+
   - name: set python package list
     set_fact:
       package_list: ['python3', 'python3-pip']
