@@ -8,8 +8,8 @@ lint:
 #  options:
 #    config-file: molecule/default/yaml-lint.yml
 platforms:
-  - name: ${OS_NAME}-instance
-    image: fanchthesystem/${OS_NAME}-with-systemd:latest
+  - name: ansible-role-exabgp-${distribution}${version}
+    image: ansible/${distribution}${version}-ansible:stable
     override_command: false
     privileged: true
     volumes:
