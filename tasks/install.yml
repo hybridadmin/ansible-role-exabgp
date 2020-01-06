@@ -51,8 +51,7 @@
       mode: "{{ item.mode }}"
     loop:
     - "{{ required_tpls }}"
-    when:
-    - not ansible_check_mode
+#    when: not ansible_check_mode
 
   - name: "exabgp: generate environment configuration"
     command: exabgp --fi > "{{ exabgp_env_path }}"
