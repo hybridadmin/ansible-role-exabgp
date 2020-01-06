@@ -6,6 +6,9 @@
 
   vars:
     use_healthcheck: false
+    python3_command: python3
+    pip3_command: pip3
+    python3_pyenv: null
 
   pre_tasks:
     - name: Update apt cache.
