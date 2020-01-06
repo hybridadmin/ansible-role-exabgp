@@ -6,8 +6,8 @@ env:
   - distribution: centos
     version: 7
   - distribution: ubuntu
-    version: 18.04
-#    version: bionic
+#    version: 18.04
+    version: bionic
 
 services: docker
 
