@@ -1,6 +1,6 @@
 FROM ubuntu:bionic
 
-RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y software-properties-common systemd && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y software-properties-common systemd python sudo bash ca-certificates iproute2 curl && rm -rf /var/lib/apt/lists/*
 
 RUN apt-add-repository -y ppa:ansible/ansible && apt-get update && apt-get install -y \
     git \
