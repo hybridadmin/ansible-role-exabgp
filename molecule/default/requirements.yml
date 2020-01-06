@@ -1,0 +1,4 @@
+---
+- src: https://github.com/hybridadmin/ansible-role-exabgp
+  version: master
+  name: ansible-role-exabgp
