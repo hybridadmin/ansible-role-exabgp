@@ -1,8 +1,8 @@
 ---
 - name: Converge
   hosts: all
-  become: true
-  no_log: result.rc != 0
+  remote_user: root
+  any_errors_fatal: true
 
   pre_tasks:
     - name: Update apt cache.
