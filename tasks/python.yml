@@ -26,6 +26,7 @@
     command: "which {{ python3_command }}"
     register: python3_which
     changed_when: False
+    when: (ansible_os_family == 'RedHat' and ansible_distribution_major_version == "8") or (ansible_os_family == 'Debian')
 
   - name: "python3: install pip"
     become: true
@@ -39,7 +40,7 @@
       dest: "{{ python3_which.stdout|dirname }}/python3"
       state: link
     when:
-    - (ansible_os_family == 'RedHat' and ansible_distribution_major_version == "7")
+    - (ansible_os_family == 'RedHat' and ansible_distribution_major_version > "7")
     - python3_pyenv == None
     - not ansible_check_mode
 
