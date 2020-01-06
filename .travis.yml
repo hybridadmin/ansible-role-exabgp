@@ -5,9 +5,16 @@ language: python
 env:
   - distribution: centos
     version: 7
+#  - distribution: centos
+#    version: 8
   - distribution: ubuntu
-    version: 18.04
-#    version: bionic
+    version: bionic
+  - distribution: ubuntu
+    version: xenial
+  - distribution: ubuntu
+    version: trusty
+  - distribution: debian
+    version: stretch
 
 services: docker
 
