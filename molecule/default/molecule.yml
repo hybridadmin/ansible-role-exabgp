@@ -1,4 +1,3 @@
----
 dependency:
   name: galaxy
 driver:
@@ -9,22 +8,29 @@ lint:
 #  options:
 #    config-file: molecule/default/yaml-lint.yml
 platforms:
-  - name: instance
-    image: "hybridadmin/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest"
-    command: ${MOLECULE_DOCKER_COMMAND:-""}
+  - name: ${DISTRO:-ubuntu}-${INSTANCE:-instance}
+    image: fanchthesystem/${DISTRO:-ubuntu}-with-systemd:latest
+    override_command: false
+    privileged: true
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    pre_build_image: true
+    tmpfs:
+      - /tmp
+      - /run
 provisioner:
   name: ansible
+  log: true
+  options:
+    v: true
   lint:
     name: ansible-lint
   playbooks:
-    converge: ${MOLECULE_PLAYBOOK:-playbook.yml}
-scenario:
-  name: default
+    converge: ${TEST_PLAYBOOK:-playbook.yml}
+  config_options:
+    defaults:
+      callback_whitelist: profile_tasks
+      timeout: 60
 verifier:
-  name: testinfra
+  name: goss
   lint:
-    name: flake8
+    name: yamllint
