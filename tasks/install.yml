@@ -85,5 +85,6 @@
     - not ansible_check_mode
     - exabgp_test.rc == 0
     ignore_errors: '{{ ansible_check_mode }}'
+    changed_when: False
 
   when: '"not found" not in pip_installed_version.stderr'
