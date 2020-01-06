@@ -12,8 +12,8 @@ platforms:
     image: ${distribution}:${version}
     dockerfile: files/Dockerfile.${distribution}-${version}
 #    command: ${MOLECULE_DOCKER_COMMAND:-""}
-#    volumes:
-#      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
 #    pre_build_image: true
 provisioner:
