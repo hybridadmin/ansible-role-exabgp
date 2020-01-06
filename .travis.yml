@@ -22,10 +22,10 @@ env:
 install:
   - pip install testinfra molecule docker
  
-before_script:
-  - cd ../
-  - mv ansible-role-$ROLE_NAME hybridadmin.$ROLE_NAME
-  - cd hybridadmin.$ROLE_NAME
+#before_script:
+#  - cd ../
+#  - mv ansible-role-$ROLE_NAME hybridadmin.$ROLE_NAME
+#  - cd hybridadmin.$ROLE_NAME
  
 script:
   - molecule test
