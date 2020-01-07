@@ -4,9 +4,9 @@ language: python
 
 env:
   global:
-    - ROLE_NAME: docker
+    - ROLE_NAME: exabgp
   matrix:
-    - MOLECULE_DISTRO: centos8
+#    - MOLECULE_DISTRO: centos8
     - MOLECULE_DISTRO: centos7
     - MOLECULE_DISTRO: ubuntu1804
     - MOLECULE_DISTRO: ubuntu1604
@@ -19,12 +19,9 @@ install:
   - pip install molecule docker
 
 before_script:
-#  - 'sudo docker pull ${distribution}:${version}'
-#  - 'sudo docker build --no-cache --rm --file=molecule/default/files/Dockerfile.${distribution}-${version} --tag=${distribution}-${version}:ansible molecule'
   - NAME=$(basename $(pwd)) ROLENAME=$(echo $NAME | sed -e s/ansible-//g) && cd .. &&  ln -fs $NAME $ROLENAME && cd $ROLENAME && pwd
 
 script:
-#  - TMPDIR=$(mktemp -d -t ci-XXXXXXXXXX) INSTANCE=$(basename $TMPDIR) molecule test
   - molecule test
 
 notifications:
