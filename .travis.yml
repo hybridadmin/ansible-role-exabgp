@@ -6,14 +6,12 @@ env:
   global:
     - ROLE_NAME: docker
   matrix:
-    - distribution: centos
-      version: 7
-    - distribution: ubuntu
-      version: bionic
-    - distribution: ubuntu
-      version: xenial
-    - distribution: debian
-      version: stretch
+    - MOLECULE_DISTRO: centos8
+    - MOLECULE_DISTRO: centos7
+    - MOLECULE_DISTRO: ubuntu1804
+    - MOLECULE_DISTRO: ubuntu1604
+    - MOLECULE_DISTRO: debian10
+    - MOLECULE_DISTRO: debian9
 
 services: docker
 
