@@ -49,7 +49,7 @@
     template:
       src: "{{ item.src }}"
       dest: "{{ item.dest }}"
-      owner: "{{ item.owner }}"
+#      owner: "{{ item.owner }}"
 #      group: "{{ item.group }}"
       mode: "{{ item.mode }}"
     loop: "{{ required_tpls }}"
