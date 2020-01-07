@@ -6,14 +6,25 @@ RUN if [ $(command -v apt-get) ]; then apt-get -y -o Acquire::GzipIndexes=false 
     elif [ $(command -v yum) ]; then yum upgrade -y && yum install -y python python3 iproute sudo yum-utils bash gnupg gcc systemd systemd-sysv dbus rsyslog systemd-networkd && sed -i 's/plugins=0/plugins=1/g' /etc/yum.conf && yum clean all; \
     fi
 
-RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
-systemd-tmpfiles-setup.service ] || rm -f $i; done); \
-rm -f /lib/systemd/system/multi-user.target.wants/*;\
-rm -f /etc/systemd/system/*.wants/*;\
+# Install systemd -- See https://hub.docker.com/_/centos/
+RUN yum -y swap -- remove fakesystemd -- install systemd systemd-libs
+RUN yum -y update; \
+(cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+rm -f /lib/systemd/system/multi-user.target.wants/*; \
+rm -f /etc/systemd/system/*.wants/*; \
 rm -f /lib/systemd/system/local-fs.target.wants/*; \
 rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
 rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-rm -f /lib/systemd/system/basic.target.wants/*;\
+rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
-VOLUME [ "/sys/fs/cgroup" ]
+
+RUN yum -y install epel-release
+RUN yum -y install git ansible sudo
+
+RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
+
+RUN echo -e '[local]\nlocalhost ansible_connection=local' > /etc/ansible/hosts
+
+VOLUME ["/sys/fs/cgroup"]
+
 CMD ["/usr/sbin/init"]
