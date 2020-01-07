@@ -1,4 +1,5 @@
 ## Exabgp role
+[![Build Status](https://travis-ci.org/hybridadmin/ansible-role-exabgp.svg?branch=master)](https://travis-ci.org/hybridadmin/ansible-role-exabgp)
 
 This role uses https://github.com/Exa-Networks/exabgp
 
