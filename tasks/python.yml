@@ -1,7 +1,7 @@
 - name: "install and configure python3"
   block:
   - name: Redhat | Enable EPEL rpm repo
-    yum:
+    package:
       name: epel-release
       state: present
     when: (ansible_os_family == 'RedHat' and ansible_distribution_major_version == "7")
