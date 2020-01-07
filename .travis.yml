@@ -3,18 +3,17 @@ sudo: required
 language: python
 
 env:
-  - distribution: centos
-    version: 7
-#  - distribution: centos
-#    version: 8
-  - distribution: ubuntu
-    version: bionic
-  - distribution: ubuntu
-    version: xenial
-#  - distribution: ubuntu
-#    version: trusty
-  - distribution: debian
-    version: stretch
+  global:
+    - ROLE_NAME: docker
+  matrix:
+    - distribution: centos
+      version: 7
+    - distribution: ubuntu
+      version: bionic
+    - distribution: ubuntu
+      version: xenial
+    - distribution: debian
+      version: stretch
 
 services: docker
 
@@ -27,7 +26,8 @@ before_script:
   - NAME=$(basename $(pwd)) ROLENAME=$(echo $NAME | sed -e s/ansible-//g) && cd .. &&  ln -fs $NAME $ROLENAME && cd $ROLENAME && pwd
 
 script:
-  - TMPDIR=$(mktemp -d -t ci-XXXXXXXXXX) INSTANCE=$(basename $TMPDIR) molecule test
+#  - TMPDIR=$(mktemp -d -t ci-XXXXXXXXXX) INSTANCE=$(basename $TMPDIR) molecule test
+  - molecule test
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
