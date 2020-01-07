@@ -12,11 +12,10 @@ galaxy_info:
         - trusty
         - xenial
         - bionic
-#    - name: Debian
-#      versions:
-#        - squeeze
-#        - wheezy
-#        - jessie
+    - name: Debian
+      versions:
+        - stretch
+        - buster
     - name: EL
       versions:
         - 7
