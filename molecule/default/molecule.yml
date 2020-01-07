@@ -10,12 +10,12 @@ lint:
 platforms:
   - name: ansible-role-exabgp-${distribution}-${version}
     image: ${distribution}:${version}
-    dockerfile: files/Dockerfile.${distribution}-${version}
-#    command: ${MOLECULE_DOCKER_COMMAND:-""}
+#    dockerfile: files/Dockerfile.${distribution}-${version}
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
-#    pre_build_image: true
+    pre_build_image: true
 provisioner:
   name: ansible
   log: true
@@ -24,7 +24,7 @@ provisioner:
   lint:
     name: ansible-lint
   playbooks:
-    converge: ${TEST_PLAYBOOK:-playbook.yml}
+    converge: ${MOLECULE_PLAYBOOK:-playbook.yml}
   config_options:
     defaults:
       callback_whitelist: profile_tasks
