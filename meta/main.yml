@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: exabgp
   author: Tinashe Chikomo
   company: N/A
   description: Role to install and configure exabgp
