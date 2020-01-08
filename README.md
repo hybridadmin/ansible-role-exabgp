@@ -3,6 +3,11 @@
 
 This role uses https://github.com/Exa-Networks/exabgp and can be configured to use health checks if required.
 
+#### Installing the role
+```
+sudo ansible-galaxy install hybridadmin.exabgp
+```
+
 #### Variables
 
 ##### General
