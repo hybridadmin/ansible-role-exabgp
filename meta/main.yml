@@ -1,7 +1,6 @@
 ---
 galaxy_info:
-  role_name: exabgp
-  author: Tinashe Chikomo
+  author: hybridadmin
   company: N/A
   description: Role to install and configure exabgp
   license: MIT
@@ -23,5 +22,6 @@ galaxy_info:
   galaxy_tags:
     - exabgp
     - bgp
+    - networking
 
 dependencies: []
