@@ -46,18 +46,18 @@
     - python3_pyenv == None
     - not ansible_check_mode
 
+  - name: "python3: upgrade pip"
+    shell: |
+      set -o pipefail
+      {{ pip3_command }} install --upgrade pip setuptools wheel
+    args:
+      executable: /bin/bash
+    check_mode: no
+    changed_when: false
+#    when: ansible_os_family == 'Debian'
+
   - name: "python3: get pip executable"
     shell: "{{ pip3_command }} --version | awk '{print $2}'"
     register: pip_installed_version
     changed_when: false
     check_mode: no
-
-- name: "python3: upgrade pip"
-  shell: |
-    set -o pipefail
-    {{ pip3_command }} install --upgrade pip setuptools wheel
-  args:
-    executable: /bin/bash
-  check_mode: no
-  changed_when: false
-  when: ansible_os_family == 'Debian'
