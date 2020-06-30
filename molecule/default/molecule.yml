@@ -6,11 +6,6 @@ driver:
 #  set -e
 #  yamllint .
 #  ansible-lint
-lint:
-  name: yamllint
-  enabled: false
-  options:
-    config-file: molecule/default/yaml-lint.yml
 platforms:
   - name: ansible-role-${ROLE_NAME}-${MOLECULE_DISTRO}
     image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest"
