@@ -45,7 +45,13 @@
 #  - name: Display all variables/facts known for a host
 #    debug: var=hostvars[inventory_hostname]
 
-  - name: "template: create configuration files and service"
+  - name: "exabgp: install service"
+    get_url:
+      url: "https://raw.githubusercontent.com/Exa-Networks/exabgp/master/etc/systemd/exabgp.service"
+      dest: "{{ exabgp_svc_path }}"
+      mode: '0644'
+
+  - name: "template: create configuration file"
     template:
       src: "{{ item.src }}"
       dest: "{{ item.dest }}"
