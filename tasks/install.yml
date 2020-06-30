@@ -20,6 +20,11 @@
     - hostvars[inventory_hostname]['ansible_'~item]['ipv4'] is defined
     ignore_errors: yes
 
+  - name: "exabgp: create user"
+    user:
+      name: exabgp
+      comment: "ExaBGP"
+
   - name: "exabgp: install from pip"
     pip:
       name: exabgp
