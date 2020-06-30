@@ -6,12 +6,12 @@
 
   vars:
     use_healthcheck: false
-    python3_command: python3
-    pip3_command: pip3
-    python3_pyenv: null
+#    python3_command: python3
+#    pip3_command: pip3
+#    python3_pyenv: null
     bgp_neighbors:
       - ip: 192.168.50.10
-        desc: "cr2"
+        desc: "r2"
     local_as: 65340
     remote_as: 65359
 
