@@ -1,3 +1,4 @@
+---
 - name: "install and configure python3"
   block:
   - name: Redhat | Enable EPEL rpm repo
