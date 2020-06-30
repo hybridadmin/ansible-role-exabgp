@@ -1,6 +1,4 @@
-python3_command: python3
-pip3_command: pip3
-python3_pyenv: null
+if_name: "eth0"
 
 bgp_neighbors:
   - ip: 10.220.50.10
