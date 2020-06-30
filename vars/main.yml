@@ -1,4 +1,6 @@
-if_name: "eth0"
+python3_command: python3
+pip3_command: pip3
+python3_pyenv: null
 
 exabgp_dirs:
   - { name: "/etc/exabgp", perms: "0754" }
