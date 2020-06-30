@@ -51,3 +51,13 @@
     register: pip_installed_version
     changed_when: false
     check_mode: no
+
+- name: "python3: upgrade pip"
+  shell: |
+    set -o pipefail
+    {{ pip3_command }} install --upgrade pip
+  args:
+    executable: /bin/bash
+  check_mode: no
+  changed_when: false
+  when: ansible_os_family == 'Debian'
