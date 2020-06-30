@@ -6,9 +6,7 @@
 
   vars:
     use_healthcheck: false
-#    python3_command: python3
-#    pip3_command: pip3
-#    python3_pyenv: null
+
     bgp_neighbors:
       - ip: 192.168.50.10
         desc: "r2"
