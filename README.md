@@ -19,7 +19,6 @@ sudo ansible-galaxy install hybridadmin.exabgp
 
 ##### Health checks
 
-* `use_healthcheck`: [optional, default false]: Whether or not to use health checks
 * `anycast_cidrs`: [optional]: List of anycast cidrs to be advertised via bgp
 
 #### Example
@@ -30,8 +29,7 @@ sudo ansible-galaxy install hybridadmin.exabgp
 local_as: 65340
 remote_as: 65359
 bgp_neighbors:
-  - ip: 10.220.50.10
-    desc: "cr2"
+  - { ip: 10.220.50.10, desc: "cr2" }
     
 community_list: "65359:500 65359:5000"
 
