@@ -47,9 +47,6 @@
     when: not item.stat.exists
     loop: "{{ folder_stats.results }}"
 
-#  - name: Display all variables/facts known for a host
-#    debug: var=hostvars[inventory_hostname]
-
   - name: "exabgp: install service"
     get_url:
       url: "https://raw.githubusercontent.com/Exa-Networks/exabgp/master/etc/systemd/exabgp.service"
@@ -64,7 +61,6 @@
 #      group: "{{ item.group }}"
       mode: "{{ item.mode }}"
     loop: "{{ required_tpls }}"
-#    when: not ansible_check_mode
 
   - name: "exabgp: generate environment configuration"
     command: exabgp --fi > "{{ exabgp_env_path }}"
