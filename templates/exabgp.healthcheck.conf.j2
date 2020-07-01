@@ -13,4 +13,4 @@ command = {{ test_cmd }}
 {% if community_list is defined %}
 community = {{ community_list }}
 {% endif %}
-disable = /var/healthcheck/{{ process_name }}.disable
+disable = /etc/exabgp/{{ process_name }}.disable
