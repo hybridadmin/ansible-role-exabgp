@@ -15,10 +15,7 @@ sudo ansible-galaxy install hybridadmin.exabgp
 * `local_as`: [required]: ASN of exabgp instance
 * `remote_as`: [required]: Peering ASN
 * `bgp_neighbors`: [required]: List of bgp neighbors to advertise prefixes to
-* `community_list`: [required]: Communities to be used when advertising prefixes
-
-##### Health checks
-
+* `community_list`: [optional]: Communities to be used when advertising prefixes
 * `anycast_cidrs`: [optional]: List of anycast cidrs to be advertised via bgp
 
 #### Example
