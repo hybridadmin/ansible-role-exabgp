@@ -1,7 +1,9 @@
+{% if use_healthcheck is sameas true %}
 process {{ process_name }} {
         run python3 -m exabgp healthcheck --sudo --config {{ exabgp_process_cfg }};
         encoder json;
 }
+{% endif %}
 
 template {
         neighbor controller {
