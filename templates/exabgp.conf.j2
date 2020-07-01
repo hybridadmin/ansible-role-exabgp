@@ -1,12 +1,11 @@
-{% if use_healthcheck is sameas true %}
 process {{ process_name }} {
-        run python3 -m exabgp healthcheck --sudo --config {{ exabgp_healthcheck_path }};
+        run python3 -m exabgp healthcheck --sudo --config {{ exabgp_process_cfg }};
         encoder json;
 }
-{% endif %}
 
 template {
         neighbor controller {
+                local-address {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }};
                 local-as {{ local_as }};
                 peer-as {{ remote_as }};
                 hold-time 180;
@@ -20,18 +19,14 @@ template {
                         }
 
 {% if use_healthcheck is sameas true %}
-                        api {
-                                processes [ {{ process_name }} ];
-                                neighbor-changes;
-                        }
+                        api { processes [ {{ process_name }} ]; }
 {% endif %}
         }
 }
 
 {% for bgp_neighbor in bgp_neighbors %}
-neighbor {{ bgp_neighbor.ip }} {
+neighbor {{ bgp_neighbor.ip }} { 
         inherit controller;
         description "{{ bgp_neighbor.desc }}";
-        local-address {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }};
 }
 {% endfor %}
