@@ -15,6 +15,7 @@ services: docker
 install:
 - pip install molecule docker
 before_script:
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 - cd ../
 - GALAXY_ROLE_NAME=$(echo "${ROLE_NAME}" | tr '-' '_')
 - mv ansible-role-$ROLE_NAME hybridadmin.$GALAXY_ROLE_NAME
