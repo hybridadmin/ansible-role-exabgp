@@ -11,9 +11,11 @@
       - { ip: 192.168.50.10, desc: "r2" }
     local_as: 65340
     remote_as: 65359
+    community_list: "65359:500 65359:5000"
     anycast_cidrs:
       - 192.168.9.188/32
       - 192.168.9.189/32
+    test_cmd: "dig +notcp +timeout=1 +tries=1 +short @127.0.0.1 a.root-servers.net"
 
   pre_tasks:
     - name: Update apt cache.
