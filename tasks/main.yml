@@ -6,19 +6,9 @@
   set_fact:
     required_dirs: "{{ exabgp_dirs }}"
 
-#- name: exabgp include heathcheck required directories
-#  set_fact:
-#    required_dirs: "{{ exabgp_dirs + healthcheck_dirs }}"
-#  when: use_healthcheck
-
 - name: exabgp set required templates
   set_fact:
     required_tpls: "{{ exabgp_templates }}"
-
-#- name: exabgp include heathcheck templates
-#  set_fact:
-#    required_tpls: "{{ exabgp_templates + healthcheck_templates }}"
-#  when: use_healthcheck
 
 - include: python.yml
 
