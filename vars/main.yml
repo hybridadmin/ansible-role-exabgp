@@ -8,6 +8,7 @@ exabgp_dirs:
 exabgp_env_path: "/etc/exabgp/exabgp.env"
 exabgp_config_path: "/etc/exabgp/exabgp.conf"
 exabgp_svc_path: "/etc/systemd/system/exabgp.service"
+exabgp_process_cfg: "/etc/exabgp/process.conf"
 
 exabgp_templates:
   - { src: "exabgp.conf.j2", dest: "{{ exabgp_config_path }}", owner: "exabgp", group: "nobody", mode: "0600" }
