@@ -75,6 +75,17 @@
       value: "{{ item.value }}"
     loop: "{{ new_env_params }}"
 
+  - name: "exabgp: created named pipes for cli"
+    shell: |
+      set -o pipefail
+      mkfifo /run/exabgp.{in,out}
+      chmod 600 /run/exabgp.{in,out}
+    args:
+      executable: /bin/bash
+    register: named_pipe_created
+    check_mode: no
+    changed_when: false
+
   - name: "exabgp: add loopback device fix"
     lineinfile:
       create: yes
