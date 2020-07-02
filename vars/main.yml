@@ -16,3 +16,7 @@ exabgp_templates:
 
 process_cfg_templates:
   - { src: 'exabgp.healthcheck.conf.j2', dest: "{{ exabgp_process_cfg }}", owner: "exabgp", group: "nobody", mode: "0754" }
+
+new_env_params:
+  - { section: "exabgp.log", option: "level", value: "INFO" }
+  - { section: "exabgp.log", option: "destination", value: "/var/log/exabgp.log" }
