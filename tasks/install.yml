@@ -67,6 +67,14 @@
     become: yes
     changed_when: False
 
+  - name: "exabgp: edit env params"
+    ini_file:
+      path: "{{ exabgp_env_path }}"
+      section: {{ item.section }}
+      option: {{ item.option }}
+      value: {{ item.value }}
+    loop: "{{ new_env_params }}"
+
   - name: "exabgp: add loopback device fix"
     lineinfile:
       create: yes
