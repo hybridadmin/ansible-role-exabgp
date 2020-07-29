@@ -6,15 +6,16 @@
 
   vars:
     use_healthcheck: false
-    process_name: "test_process"
     bgp_neighbors:
       - { ip: 192.168.50.10, desc: "r2" }
     local_as: 65340
     remote_as: 65359
     community_list: "65359:500 65359:5000"
-    anycast_cidrs:
-      - 192.168.9.188/32
-      - 192.168.9.189/32
+    anycast_procs:
+      - name: dns1v4
+        cidr: 192.168.59.188/32
+      - name: dns2v4
+        cidr: 192.168.59.189/32
     test_cmd: "dig +notcp +timeout=1 +tries=1 +short @127.0.0.1 a.root-servers.net"
 
   pre_tasks:
