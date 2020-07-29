@@ -14,8 +14,8 @@ exabgp_process_cfg: "/etc/exabgp/process.conf"
 exabgp_templates:
   - { src: "exabgp.conf.j2", dest: "{{ exabgp_config_path }}", owner: "exabgp", group: "nobody", mode: "0600" }
 
-process_cfg_templates:
-  - { src: 'exabgp.healthcheck.conf.j2', dest: "{{ exabgp_process_cfg }}", owner: "exabgp", group: "nobody", mode: "0754" }
+#process_cfg_templates:
+#  - { src: 'exabgp.healthcheck.conf.j2', dest: "{{ exabgp_process_cfg }}", owner: "exabgp", group: "nobody", mode: "0754" }
 
 new_env_params:
   - { section: "exabgp.log", option: "level", value: "INFO" }

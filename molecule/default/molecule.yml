@@ -7,7 +7,7 @@ driver:
 #  yamllint .
 #  ansible-lint
 platforms:
-  - name: ansible-role-${ROLE_NAME}-${MOLECULE_DISTRO}
+  - name: ansible-role-${ROLE_NAME:-exabgp}-${MOLECULE_DISTRO:-centos7}
     image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:

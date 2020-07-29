@@ -10,9 +10,9 @@
   set_fact:
     required_tpls: "{{ exabgp_templates }}"
 
-- name: exabgp include process cfg templates
-  set_fact:
-    required_tpls: "{{ exabgp_templates + process_cfg_templates }}"
+#- name: exabgp include process cfg templates
+#  set_fact:
+#    required_tpls: "{{ exabgp_templates + process_cfg_templates }}"
 
 - include: python.yml
 
