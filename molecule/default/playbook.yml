@@ -5,7 +5,6 @@
   any_errors_fatal: true
 
   vars:
-#    use_healthcheck: false
     bgp_neighbors:
       - { ip: 192.168.50.10, desc: "r2" }
     local_as: 65340
