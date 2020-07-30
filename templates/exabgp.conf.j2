@@ -1,6 +1,6 @@
 {% for proc in anycast_procs %}
 process {{ proc.name }} {
-        run python3 -m exabgp healthcheck --sudo --ip {{ proc.cidr }} --community "{{ community_list }}" --command "{{ test_cmd }}" --withdraw-on-down --interval 10 --up-metric 100 --label lab01;
+        run python3 -m exabgp healthcheck --ip {{ proc.cidr }} --community "{{ community_list }}" --command "{{ test_cmd }}" --withdraw-on-down --interval 10 --up-metric 100 --label lab01;
         encoder json;
 }
 {% endfor %}
@@ -20,7 +20,7 @@ template {
                     ipv4 unicast;
                 }
 
-{% if use_healthcheck is sameas true %}
+{% if anycast_procs is defined %}
                 api { processes [ {{ anycast_procs | map(attribute='name')  | list | join(', ') }} ]; }
 {% endif %}
         }

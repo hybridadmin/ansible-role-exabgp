@@ -1,4 +1,4 @@
-if_name: "eth0"
+#if_name: "eth0"
 
 bgp_neighbors:
   - { ip: 10.168.50.10, desc: "cr2" }

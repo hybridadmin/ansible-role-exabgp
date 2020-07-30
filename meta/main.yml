@@ -4,21 +4,16 @@ galaxy_info:
   company: N/A
   description: Role to install and configure exabgp
   license: MIT
-  min_ansible_version: 2.4
+  min_ansible_version: 2.9
   platforms:
     - name: Ubuntu
       versions:
-        - trusty
         - xenial
         - bionic
-    - name: Debian
-      versions:
-        - stretch
-        - buster
     - name: EL
       versions:
         - 7
-#        - 8
+        - 8
   galaxy_tags:
     - exabgp
     - bgp
