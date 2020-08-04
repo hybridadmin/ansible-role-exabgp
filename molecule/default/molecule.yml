@@ -1,11 +1,12 @@
+---
 dependency:
   name: galaxy
 driver:
   name: docker
-#lint: |
-#  set -e
-#  yamllint .
-#  ansible-lint
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
 platforms:
   - name: ansible-role-${ROLE_NAME:-exabgp}-${MOLECULE_DISTRO:-centos7}
     image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest"

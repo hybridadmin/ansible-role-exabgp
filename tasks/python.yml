@@ -6,7 +6,7 @@
       name: epel-release
       state: present
     when: (ansible_os_family == 'RedHat' and ansible_distribution_major_version == "7")
-    
+
   - name: set python package list
     set_fact:
       package_list: ['python3', 'which']
@@ -26,14 +26,14 @@
   - name: "python3: get python executable"
     command: "which {{ python3_command }}"
     register: python3_which
-    changed_when: False
+    changed_when: false
     when: (ansible_os_family == 'RedHat' and ansible_distribution_major_version == "8") or (ansible_os_family == 'Debian')
 
   - name: "python3: install pip"
     become: true
     command: "{{ python3_command }} -m ensurepip"
     when: ansible_os_family == 'RedHat'
-    changed_when: False
+    changed_when: false
 
   - name: "python3: upgrade pip"
     shell: |
@@ -41,11 +41,11 @@
       {{ pip3_command }} install --upgrade pip setuptools wheel
     args:
       executable: /bin/bash
-    check_mode: no
+    check_mode: false
     changed_when: false
 
   - name: "python3: get pip executable"
     shell: "{{ pip3_command }} --version | awk '{print $2}'"
     register: pip_installed_version
     changed_when: false
-    check_mode: no
+    check_mode: false
