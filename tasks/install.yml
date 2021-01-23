@@ -1,4 +1,5 @@
 ---
+
 - name: "install and configure exabgp"
   block:
   - name: "exabgp: disable arp check kernel paramters"
@@ -27,10 +28,14 @@
       comment: "ExaBGP"
 
   - name: "exabgp: install from pip"
-    pip:
-      name: exabgp
-      executable: "{{ pip3_command }}"
-    ignore_errors: '{{ ansible_check_mode }}'
+    shell: |
+      set -o pipefail
+      {{ python3_which.stdout }} -m pip install exabgp
+    args:
+      executable: /bin/bash
+    changed_when: false
+    when:
+      - python3_which is defined
 
   - name: "exabgp: checking directories exist"
     stat:
@@ -74,6 +79,7 @@
       section: "{{ item.section }}"
       option: "{{ item.option }}"
       value: "{{ item.value }}"
+      mode: "0644"
     loop: "{{ new_env_params }}"
 
   - name: "exabgp: created named pipes for cli"
@@ -116,4 +122,4 @@
     ignore_errors: '{{ ansible_check_mode }}'
     changed_when: false
 
-  when: '"not found" not in pip_installed_version.stderr'
+  when: pip_installed.rc == 0

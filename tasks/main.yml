@@ -1,4 +1,5 @@
 ---
+
 - name: Load in project specific vars
   include_vars: "../vars/main.yml"
 
@@ -9,6 +10,12 @@
 - name: exabgp set required templates
   set_fact:
     required_tpls: "{{ exabgp_templates }}"
+
+- name: Redhat | Enable EPEL rpm repo
+  action: >
+    {{ ansible_pkg_mgr }} name=epel-release state=present update_cache=yes
+  become: yes
+  when: (ansible_os_family == 'RedHat' and ansible_distribution_major_version == "7")
 
 - include: python.yml
 

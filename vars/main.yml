@@ -1,6 +1,4 @@
-python3_command: python3
-pip3_command: pip3
-python3_pyenv: null
+---
 
 exabgp_dirs:
   - {name: "/etc/exabgp", perms: "0754"}
@@ -18,3 +16,22 @@ exabgp_templates:
 new_env_params:
   - {section: "exabgp.log", option: "level", value: "INFO"}
   - {section: "exabgp.log", option: "destination", value: "/var/log/exabgp.log"}
+
+_python_requirements:
+  default:
+    - python3-pip
+  Debian:
+    - python3
+  RedHat:
+    - python3
+
+python_requirements: "{{ _python_requirements['default'] + _python_requirements[ansible_os_family] }}"
+
+pip_packages:
+  - pip
+  - setuptools
+  - wheel
+
+python3_command: python3
+pip3_command: pip3
+python3_pyenv: null

@@ -1,4 +1,5 @@
 ---
+
 bgp_neighbors:
   - {ip: 10.168.50.10, desc: "cr2"}
 community_list: "65359:500 65359:5000"
