@@ -1,10 +1,11 @@
 ---
 name: CI
+
 'on':
   pull_request:
   push:
     branches:
-      - master
+      - main
   schedule:
     - cron: "0 6 * * 3"
 
@@ -40,11 +41,16 @@ jobs:
       max-parallel: 5
       matrix:
         distro:
-          - centos8
-          - centos7
-          - ubuntu2004
-          - ubuntu1804
-          - ubuntu1604
+          - image: centos
+            tag: 8
+          - image: centos
+            tag: 7
+          - image: ubuntu
+            tag: focal
+          - image: ubuntu
+            tag: bionic
+          - image: ubuntu
+            tag: xenial
     env:
       ANSIBLE_CALLBACK_WHITELIST: profile_tasks
       ANSIBLE_STDOUT_CALLBACK: yaml
@@ -67,4 +73,5 @@ jobs:
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
-          MOLECULE_DISTRO: ${{ matrix.distro }}
+          MOLECULE_DISTRO: ${{ matrix.distro.image }}
+          MOLECULE_DISTRO_TAG: ${{ matrix.distro.tag }}
