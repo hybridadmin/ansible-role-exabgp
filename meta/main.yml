@@ -1,6 +1,7 @@
 ---
 galaxy_info:
   author: hybridadmin
+  role_name: exabgp
   company: N/A
   description: Role to install and configure exabgp
   license: MIT
