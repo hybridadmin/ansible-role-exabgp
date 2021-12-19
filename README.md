@@ -1,9 +1,11 @@
 ## Exabgp role
+
 [![Build Status](https://travis-ci.com/hybridadmin/ansible-role-exabgp.svg?branch=master)](https://travis-ci.com/hybridadmin/ansible-role-exabgp) ![CI](https://github.com/hybridadmin/ansible-role-exabgp/workflows/CI/badge.svg?branch=master)
 
 This role uses https://github.com/Exa-Networks/exabgp and can be configured to use health checks if required.
 
 #### Installing the role
+
 ```
 sudo ansible-galaxy install hybridadmin.exabgp
 ```
@@ -12,11 +14,11 @@ sudo ansible-galaxy install hybridadmin.exabgp
 
 ##### General
 
-* `local_as`: [required]: ASN of exabgp instance
-* `remote_as`: [required]: Peering ASN
-* `bgp_neighbors`: [required]: List of bgp neighbors to advertise prefixes to
-* `community_list`: [optional]: Communities to be used when advertising prefixes
-* `anycast_procs`: [optional]: List of anycast cidrs to be advertised via bgp
+- `local_as`: [required]: ASN of exabgp instance
+- `remote_as`: [required]: Peering ASN
+- `bgp_neighbors`: [required]: List of bgp neighbors to advertise prefixes to
+- `community_list`: [optional]: Communities to be used when advertising prefixes
+- `anycast_procs`: [optional]: List of anycast cidrs to be advertised via bgp
 
 #### Example
 
@@ -27,7 +29,7 @@ local_as: 65340
 remote_as: 65359
 bgp_neighbors:
   - { ip: 10.220.50.10, desc: "cr2" }
-    
+
 community_list: "65359:500 65359:5000"
 anycast_procs:
   - name: dns1v4

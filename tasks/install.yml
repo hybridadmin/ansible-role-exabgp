@@ -1,125 +1,124 @@
 ---
-
 - name: "install and configure exabgp"
   block:
-  - name: "exabgp: disable arp check kernel paramters"
-    sysctl:
-      name: net.ipv4.conf.all.arp_filter
-      value: "1"
-      state: present
-      reload: true
-    ignore_errors: true
+    - name: "exabgp: disable arp check kernel paramters"
+      sysctl:
+        name: net.ipv4.conf.all.arp_filter
+        value: "1"
+        state: present
+        reload: true
+      register: install_cmd
 
-  - name: "exabgp: configure router advertisements kernel paramters"
-    sysctl:
-      name: "net.ipv6.conf.{{ item }}.accept_ra"
-      value: "0"
-      state: present
-      reload: true
-    loop: "{{ ansible_interfaces }}"
-    when:
-      - not item | regex_search('lo' | string)
-      - hostvars[inventory_hostname]['ansible_'~item]['ipv4'] is defined
-    ignore_errors: true
+    - name: "exabgp: configure router advertisements kernel paramters"
+      sysctl:
+        name: "net.ipv6.conf.{{ item }}.accept_ra"
+        value: "0"
+        state: present
+        reload: true
+      loop: "{{ ansible_interfaces }}"
+      when:
+        - not item | regex_search('lo' | string)
+        - hostvars[inventory_hostname]['ansible_'~item]['ipv4'] is defined
+      register: configure_ra
 
-  - name: "exabgp: create user"
-    user:
-      name: exabgp
-      comment: "ExaBGP"
+    - name: "exabgp: create user"
+      user:
+        name: exabgp
+        comment: "ExaBGP"
 
-  - name: "exabgp: install from pip"
-    shell: |
-      set -o pipefail
-      {{ python3_which.stdout }} -m pip install exabgp
-    args:
-      executable: /bin/bash
-    changed_when: false
-    when:
-      - python3_which is defined
+    - name: "exabgp: install from pip"
+      shell: |
+        set -o pipefail
+        {{ python3_which.stdout }} -m pip install exabgp
+      args:
+        executable: /bin/bash
+      changed_when: false
+      when:
+        - python3_which is defined
 
-  - name: "exabgp: checking directories exist"
-    stat:
-      path: "{{ item }}"
-    register: folder_stats
-    loop: "{{ required_dirs }}"
+    - name: "exabgp: checking directories exist"
+      stat:
+        path: "{{ item }}"
+      register: folder_stats
+      loop: "{{ required_dirs }}"
 
-  - name: "exabgp: creating required directories"
-    file:
-      path: "{{ item.item.name }}"
-      state: directory
-      mode: "{{ item.item.perms }}"
-      group: root
-      owner: root
-    when: not item.stat.exists
-    loop: "{{ folder_stats.results }}"
+    - name: "exabgp: creating required directories"
+      file:
+        path: "{{ item.item.name }}"
+        state: directory
+        mode: "{{ item.item.perms }}"
+        group: root
+        owner: root
+      when: not item.stat.exists
+      loop: "{{ folder_stats.results }}"
 
-  - name: "exabgp: install service"
-    get_url:
-      url: "{{ exabgp_svc_uri }}"
-      dest: "{{ exabgp_svc_path }}"
-      mode: '0644'
+    - name: "exabgp: install service"
+      get_url:
+        url: "{{ exabgp_svc_uri }}"
+        dest: "{{ exabgp_svc_path }}"
+        mode: "0644"
 
-  - name: "template: create configuration file"
-    template:
-      src: "{{ item.src }}"
-      dest: "{{ item.dest }}"
-      # owner: "{{ item.owner }}"
-      # group: "{{ item.group }}"
-      mode: "{{ item.mode }}"
-    loop: "{{ required_tpls }}"
+    - name: "template: create configuration file"
+      template:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        # owner: "{{ item.owner }}"
+        # group: "{{ item.group }}"
+        mode: "{{ item.mode }}"
+      loop: "{{ required_tpls }}"
 
-  - name: "exabgp: generate environment configuration"
-    command: exabgp --fi > "{{ exabgp_env_path }}"
-    become: true
-    changed_when: false
+    - name: "exabgp: generate environment configuration"
+      command: exabgp --fi > "{{ exabgp_env_path }}"
+      become: true
+      changed_when: false
 
-  - name: "exabgp: edit env params"
-    ini_file:
-      path: "{{ exabgp_env_path }}"
-      section: "{{ item.section }}"
-      option: "{{ item.option }}"
-      value: "{{ item.value }}"
-      mode: "0644"
-    loop: "{{ new_env_params }}"
+    - name: "exabgp: edit env params"
+      ini_file:
+        path: "{{ exabgp_env_path }}"
+        section: "{{ item.section }}"
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+        mode: "0644"
+      loop: "{{ new_env_params }}"
 
-  - name: "exabgp: created named pipes for cli"
-    shell: |
-      set -o pipefail
-      mkfifo /run/exabgp.{in,out}
-      chmod 600 /run/exabgp.{in,out}
-    args:
-      executable: /bin/bash
-    register: named_pipe_created
-    check_mode: false
-    changed_when: false
+    - name: "exabgp: created named pipes for cli"
+      shell: |
+        set -o pipefail
+        mkfifo /run/exabgp.{in,out}
+        chmod 600 /run/exabgp.{in,out}
+      args:
+        executable: /bin/bash
+      register: named_pipe_created
+      check_mode: false
+      changed_when: false
 
-  - name: "exabgp: add loopback device fix"
-    lineinfile:
-      create: true
-      path: /etc/sudoers.d/exabgp
-      state: present
-      mode: 0440
-      regexp: '^nobody ALL='
-      line: 'nobody ALL= NOPASSWD: /sbin/ip'
-      validate: /usr/sbin/visudo -cf %s
-    when: not ansible_check_mode and ansible_connection != "docker"
+    - name: "exabgp: add loopback device fix"
+      lineinfile:
+        create: true
+        path: /etc/sudoers.d/exabgp
+        state: present
+        mode: 0440
+        regexp: "^nobody ALL="
+        line: "nobody ALL= NOPASSWD: /sbin/ip"
+        validate: /usr/sbin/visudo -cf %s
+      when: not ansible_check_mode and ansible_connection != "docker"
 
-  - name: "exabgp: test configuration"
-    command: exabgp --test "{{ exabgp_config_path }}"
-    register: exabgp_test
-    ignore_errors: true
-    changed_when: false
+    - name: "exabgp: test configuration"
+      command: exabgp --test "{{ exabgp_config_path }}"
+      register: exabgp_test
+      ignore_errors: true
+      changed_when: false
 
-  - name: "exabgp: start service"
-    systemd:
-      state: started
-      daemon_reload: true
-      name: exabgp
-      enabled: true
-    when:
-      - not ansible_check_mode
-      - exabgp_test.rc == 0
-    ignore_errors: '{{ ansible_check_mode }}'
-    changed_when: false
+    - name: "exabgp: start service"
+      systemd:
+        state: started
+        daemon_reload: true
+        name: exabgp
+        enabled: true
+      when:
+        - not ansible_check_mode
+        - exabgp_test.rc == 0
+      ignore_errors: "{{ ansible_check_mode }}"
+      changed_when: false
 
   when: pip_installed.rc == 0

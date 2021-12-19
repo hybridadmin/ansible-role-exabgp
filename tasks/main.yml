@@ -1,5 +1,4 @@
 ---
-
 - name: Load in project specific vars
   include_vars: "../vars/main.yml"
 

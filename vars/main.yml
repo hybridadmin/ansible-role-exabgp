@@ -1,8 +1,7 @@
 ---
-
 exabgp_dirs:
-  - {name: "/etc/exabgp", perms: "0754"}
-  - {name: "/usr/local/etc/exabgp", perms: "0754"}
+  - { name: "/etc/exabgp", perms: "0754" }
+  - { name: "/usr/local/etc/exabgp", perms: "0754" }
 
 exabgp_svc_uri: "https://raw.githubusercontent.com/Exa-Networks/exabgp/master/etc/systemd/exabgp.service"
 exabgp_env_path: "/usr/local/etc/exabgp/exabgp.env"
@@ -11,11 +10,21 @@ exabgp_svc_path: "/etc/systemd/system/exabgp.service"
 exabgp_process_cfg: "/etc/exabgp/process.conf"
 
 exabgp_templates:
-  - {src: "exabgp.conf.j2", dest: "{{ exabgp_config_path }}", owner: "exabgp", group: "nobody", mode: "0600"} 
+  - {
+      src: "exabgp.conf.j2",
+      dest: "{{ exabgp_config_path }}",
+      owner: "exabgp",
+      group: "nobody",
+      mode: "0600",
+    }
 
 new_env_params:
-  - {section: "exabgp.log", option: "level", value: "INFO"}
-  - {section: "exabgp.log", option: "destination", value: "/var/log/exabgp.log"}
+  - { section: "exabgp.log", option: "level", value: "INFO" }
+  - {
+      section: "exabgp.log",
+      option: "destination",
+      value: "/var/log/exabgp.log",
+    }
 
 _python_requirements:
   default:
