@@ -53,8 +53,7 @@ jobs:
             tag: focal
           - image: ubuntu
             tag: bionic
-          - image: ubuntu
-            tag: xenial
+
     env:
       ANSIBLE_CALLBACK_WHITELIST: profile_tasks
       ANSIBLE_STDOUT_CALLBACK: yaml
