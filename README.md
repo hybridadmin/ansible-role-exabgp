@@ -14,6 +14,7 @@ sudo ansible-galaxy install hybridadmin.exabgp
 
 ##### General
 
+- `exabgp_version`: [optional]: eg 4.2.15, latest version is installed if not specified
 - `local_as`: [required]: ASN of exabgp instance
 - `remote_as`: [required]: Peering ASN
 - `bgp_neighbors`: [required]: List of bgp neighbors to advertise prefixes to
@@ -25,6 +26,7 @@ sudo ansible-galaxy install hybridadmin.exabgp
 ##### Basic example
 
 ```yaml
+exabgp_version: 4.2.15
 local_as: 65340
 remote_as: 65359
 bgp_neighbors:

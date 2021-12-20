@@ -1,4 +1,7 @@
 ---
+
+exabgp_pkg_version: "{% if exabgp_version is defined %}exabgp=={{exabgp_version}}{% else %}exabgp{% endif %}"
+
 exabgp_dirs:
   - { name: "/etc/exabgp", perms: "0754" }
   - { name: "/usr/local/etc/exabgp", perms: "0754" }

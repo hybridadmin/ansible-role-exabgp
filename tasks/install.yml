@@ -29,7 +29,7 @@
     - name: "exabgp: install from pip"
       shell: |
         set -o pipefail
-        {{ python3_which.stdout }} -m pip install exabgp
+        {{ python3_which.stdout }} -m pip install {{ exabgp_pkg_version }}
       args:
         executable: /bin/bash
       changed_when: false
