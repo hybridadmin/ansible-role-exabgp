@@ -1,7 +1,7 @@
 ---
 
 - name: Install dnsutils
-  when: not(ansible_distribution_release is regex('bionic'))
+  when: ansible_os_family == 'Debian'
   package:
     name: dnsutils
     state: present
@@ -97,6 +97,16 @@
         block: |
           [exabgp.daemon]
           user=root
+
+    - name: "exabgp: service fixes - bionic"
+      when: ansible_distribution_release is regex('bionic')
+      shell: |
+        set -o pipefail
+        sed -i -e 's/chown/\/bin\/chown/g' \
+            -e 's/chmod/\/bin\/chmod/g' \
+            -e 's/mkfifo/\/usr\/bin\/mkfifo/g' \
+            -e 's/ExecStart=\/usr\/sbin/ExecStart=\/usr\/local\/bin/g' /etc/systemd/system/exabgp.service
+        systemctl daemon-reload
 
     - name: "exabgp: created named pipes for cli"
       shell: |
