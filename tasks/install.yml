@@ -75,6 +75,7 @@
             -e 's/ExecStart=\/usr\/sbin/ExecStart=\/usr\/local\/bin/g' /etc/systemd/system/exabgp.service
       args:
         executable: /bin/bash
+      check_mode: false
       changed_when: false
 
     - name: "template: create configuration file"
