@@ -107,6 +107,7 @@
             -e 's/mkfifo/\/usr\/bin\/mkfifo/g' \
             -e 's/ExecStart=\/usr\/sbin/ExecStart=\/usr\/local\/bin/g' /etc/systemd/system/exabgp.service
         systemctl daemon-reload
+      changed_when: false
 
     - name: "exabgp: created named pipes for cli"
       shell: |
