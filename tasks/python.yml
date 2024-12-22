@@ -44,3 +44,4 @@
     executable: /bin/bash
   changed_when: false
   register: pip_installed
+  when: not(ansible_distribution_release is regex('bookworm|noble'))
