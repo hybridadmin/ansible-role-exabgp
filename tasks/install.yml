@@ -1,4 +1,11 @@
 ---
+
+- name: Install dnsutils
+  when: not(ansible_distribution_release is regex('bionic'))
+  package:
+    name: dnsutils
+    state: present
+
 - name: "install and configure exabgp"
   block:
     - name: "exabgp: disable arp check kernel paramters"
@@ -80,6 +87,16 @@
         value: "{{ item.value }}"
         mode: "0644"
       loop: "{{ new_env_params }}"
+
+    - name: "exabgp: service starup user fix"
+      when: ansible_distribution_release is regex('bionic')
+      blockinfile:
+        path: "{{ exabgp_env_path }}"
+        append_newline: true
+        prepend_newline: true
+        block: |
+          [exabgp.daemon]
+          user=root
 
     - name: "exabgp: created named pipes for cli"
       shell: |
