@@ -1,6 +1,6 @@
 ## Exabgp role
 
-[![Release](https://img.shields.io/github/actions/workflow/status/hybridadmin/ansible-role-exabgp/release.yml)
+![Release](https://img.shields.io/github/actions/workflow/status/hybridadmin/ansible-role-exabgp/release.yml)
 ![Build CI](https://img.shields.io/github/actions/workflow/status/hybridadmin/ansible-role-exabgp/build.yml)
 ![Ansible Role](https://img.shields.io/ansible/role/d/hybridadmin/exabgp)
 
