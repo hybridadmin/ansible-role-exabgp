@@ -1,4 +1,11 @@
 ---
+
+- name: Install dnsutils
+  when: ansible_os_family == 'Debian'
+  package:
+    name: dnsutils
+    state: present
+
 - name: "install and configure exabgp"
   block:
     - name: "exabgp: disable arp check kernel paramters"
@@ -58,6 +65,19 @@
         dest: "{{ exabgp_svc_path }}"
         mode: "0644"
 
+    - name: "exabgp: service fixes - bionic"
+      when: ansible_distribution_release is regex('bionic')
+      shell: |
+        set -o pipefail
+        sed -i -e 's/chown/\/bin\/chown/g' \
+            -e 's/chmod/\/bin\/chmod/g' \
+            -e 's/mkfifo/\/usr\/bin\/mkfifo/g' \
+            -e 's/ExecStart=\/usr\/sbin/ExecStart=\/usr\/local\/bin/g' /etc/systemd/system/exabgp.service
+      args:
+        executable: /bin/bash
+      check_mode: false
+      changed_when: false
+
     - name: "template: create configuration file"
       template:
         src: "{{ item.src }}"
@@ -80,6 +100,16 @@
         value: "{{ item.value }}"
         mode: "0644"
       loop: "{{ new_env_params }}"
+
+    - name: "exabgp: service starup user fix"
+      when: ansible_distribution_release is regex('bionic')
+      blockinfile:
+        path: "{{ exabgp_env_path }}"
+        append_newline: true
+        prepend_newline: true
+        block: |
+          [exabgp.daemon]
+          user=root
 
     - name: "exabgp: created named pipes for cli"
       shell: |

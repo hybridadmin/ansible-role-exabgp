@@ -8,22 +8,7 @@
       loop:
         - "{{ python_requirements }}"
 
-  when: not (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial')
-
-- name: "latest python3 xenial"
-  block:
-    - name: ubuntu xenial python install fix
-      shell: |
-        set -o pipefail
-        sudo add-apt-repository ppa:deadsnakes/ppa
-        sudo apt-get update -qqy
-        {{ ansible_pkg_mgr }} install -qqy python3.7 python3-pip
-      args:
-        executable: /bin/bash
-      become: true
-      changed_when: false
-
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
+  when: not (ansible_distribution == 'Ubuntu')
 
 - name: get python executable
   shell: |
@@ -39,8 +24,13 @@
 - name: "python3: upgrade pip"
   shell: |
     set -o pipefail
-    {{ python3_which.stdout }} -m pip install --upgrade --force-reinstall {{ pip_packages | join( ' ') }}
+    if [[ "{{ ansible_distribution_release }}" =~ (bookworm|noble) ]]; then
+        echo "pip installed via package so skipping upgrade for ansible_distribution_release {{ ansible_distribution_release }}"
+    else
+        {{ python3_which.stdout }} -m pip install --upgrade --force-reinstall {{ pip_packages | join(' ') }}
+    fi
   args:
     executable: /bin/bash
   changed_when: false
   register: pip_installed
+#  when: not(ansible_distribution_release is regex('bookworm|noble'))

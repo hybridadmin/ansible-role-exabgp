@@ -1,6 +1,8 @@
 ## Exabgp role
 
-[![Build Status](https://travis-ci.com/hybridadmin/ansible-role-exabgp.svg?branch=master)](https://travis-ci.com/hybridadmin/ansible-role-exabgp) ![CI](https://github.com/hybridadmin/ansible-role-exabgp/workflows/CI/badge.svg?branch=master)
+![Release](https://img.shields.io/github/actions/workflow/status/hybridadmin/ansible-role-exabgp/release.yml)
+![Build CI](https://img.shields.io/github/actions/workflow/status/hybridadmin/ansible-role-exabgp/build.yml)
+![Ansible Role](https://img.shields.io/ansible/role/d/hybridadmin/exabgp)
 
 This role uses https://github.com/Exa-Networks/exabgp and can be configured to use health checks if required.
 
