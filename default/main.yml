@@ -1,6 +1,6 @@
 ---
 
-exabgp_version: 4.2.22 #4.2.15
+exabgp_version: 4.2.25
 
 bgp_neighbors:
   - { ip: 10.168.50.10, desc: "cr2" }
