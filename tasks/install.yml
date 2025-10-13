@@ -33,7 +33,7 @@
         name: exabgp
         comment: "ExaBGP"
 
-    - name: "exabgp: install from pip"
+    - name: "exabgp: install for root"
       shell: |
         set -o pipefail
         {{ python3_which.stdout }} -m pip install {{ exabgp_pkg_version }}
@@ -42,6 +42,17 @@
       changed_when: false
       when:
         - python3_which is defined
+        - ansible_distribution != 'Debian'
+
+    - name: "exabgp: install for user"
+      shell: |
+        set -o pipefail
+        uv pip install {{ exabgp_pkg_version }}
+      args:
+        executable: /bin/bash
+      when:
+        - ansible_distribution == 'Debian'
+
 
     - name: "exabgp: checking directories exist"
       stat:

@@ -1,5 +1,5 @@
 ---
-- name: "latest python3 all other distros"
+- name: "latest python3 most distros"
   block:
     - name: install python3 and pip3
       package:
@@ -19,6 +19,8 @@
   become: true
   register: python3_which
   changed_when: false
+  when:
+    - ansible_distribution != 'Debian'
 
 # https://github.com/pypa/pip/issues/5599
 - name: "python3: upgrade pip"
@@ -33,4 +35,30 @@
     executable: /bin/bash
   changed_when: false
   register: pip_installed
+  when:
+    - ansible_distribution != 'Debian'
 #  when: not(ansible_distribution_release is regex('bookworm|noble'))
+
+- name: "python: install using uv"
+  shell: |
+    set -o pipefail
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    echo "export PATH='${PATH}:$HOME/.local/bin'"
+    source ~/.bashrc
+  args:
+    executable: /bin/bash
+  changed_when: false
+  when:
+    - ansible_distribution == 'Debian'
+
+- name: "python: install using uv venv"
+  shell: |
+    set -o pipefail
+    uv venv
+    uv pip install --upgrade setuptools
+    #source ~/.venv/bin/activate
+  args:
+    executable: /bin/bash
+  changed_when: false
+  when:
+    - ansible_distribution == 'Debian'
