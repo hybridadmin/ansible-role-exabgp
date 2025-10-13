@@ -53,8 +53,6 @@ jobs:
             tag: jammy
           - image: ubuntu
             tag: focal
-          - image: ubuntu
-            tag: bionic
 
     env:
       ANSIBLE_CALLBACK_WHITELIST: profile_tasks
