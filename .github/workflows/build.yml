@@ -53,6 +53,8 @@ jobs:
             tag: jammy
           - image: ubuntu
             tag: focal
+          - image: debian
+            tag: 12
 
     env:
       ANSIBLE_CALLBACK_WHITELIST: profile_tasks
