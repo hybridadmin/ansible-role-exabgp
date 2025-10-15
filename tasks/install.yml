@@ -53,7 +53,6 @@
       when:
         - ansible_distribution == 'Debian'
 
-
     - name: "exabgp: checking directories exist"
       stat:
         path: "{{ item }}"
@@ -76,18 +75,21 @@
         dest: "{{ exabgp_svc_path }}"
         mode: "0644"
 
-    - name: "exabgp: service fixes - bionic"
-      when: ansible_distribution_release is regex('bionic')
+    - name: "exabgp: get executable"
       shell: |
         set -o pipefail
-        sed -i -e 's/chown/\/bin\/chown/g' \
-            -e 's/chmod/\/bin\/chmod/g' \
-            -e 's/mkfifo/\/usr\/bin\/mkfifo/g' \
-            -e 's/ExecStart=\/usr\/sbin/ExecStart=\/usr\/local\/bin/g' /etc/systemd/system/exabgp.service
+        which exabgp
       args:
         executable: /bin/bash
-      check_mode: false
+      become: true
+      register: exabgp_which
       changed_when: false
+
+    - name: "exabgp: set service exabgp path"
+      ansible.builtin.replace:
+        path: "{{ exabgp_svc_path }}"
+        regexp: '/usr/sbin/exabgp'
+        replace: '{{ exabgp_which.stdout }}'
 
     - name: "template: create configuration file"
       template:
@@ -113,7 +115,6 @@
       loop: "{{ new_env_params }}"
 
     - name: "exabgp: service starup user fix"
-      when: ansible_distribution_release is regex('bionic')
       blockinfile:
         path: "{{ exabgp_env_path }}"
         append_newline: true

@@ -7,10 +7,21 @@ exabgp_dirs:
   - { name: "/usr/local/etc/exabgp", perms: "0754" }
 
 exabgp_svc_uri: "https://raw.githubusercontent.com/Exa-Networks/exabgp/master/etc/systemd/exabgp.service"
-exabgp_env_path: "/usr/local/etc/exabgp/exabgp.env"
 exabgp_config_path: "/etc/exabgp/exabgp.conf"
 exabgp_svc_path: "/etc/systemd/system/exabgp.service"
 exabgp_process_cfg: "/etc/exabgp/process.conf"
+
+_exabgp_env_path:
+  Debian:
+    '12': "/usr/local/etc/exabgp/exabgp.env"
+    '13': "/root/.venv/etc/exabgp/exabgp.env"
+  Ubuntu:
+    '22': "/usr/local/etc/exabgp/exabgp.env"
+    '24': "/usr/local/etc/exabgp/exabgp.env"
+  RedHat:
+    '8': "/usr/local/etc/exabgp/exabgp.env"
+
+exabgp_env_path:  "{{ _exabgp_env_path[ansible_distribution][ansible_distribution_major_version] }}"
 
 exabgp_templates:
   - {

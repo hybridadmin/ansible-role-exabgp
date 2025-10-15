@@ -48,6 +48,7 @@
   args:
     executable: /bin/bash
   changed_when: false
+  register: pip_installed
   when:
     - ansible_distribution == 'Debian'
 
