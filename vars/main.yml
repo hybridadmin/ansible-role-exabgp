@@ -3,8 +3,9 @@
 exabgp_pkg_version: "{% if exabgp_version is defined %}exabgp=={{ exabgp_version }}{% else %}exabgp{% endif %}"
 
 exabgp_dirs:
-  - { name: "/etc/exabgp", perms: "0754" }
-  - { name: "/usr/local/etc/exabgp", perms: "0754" }
+  - { name: "/etc/exabgp", owner: "root", group: "root", perms: "0754" }
+  - { name: "/usr/local/etc/exabgp", owner: "root", group: "root", perms: "0754" }
+  - { name: "/run/exabgp", owner: "exabgp", group: "exabgp", perms: "0754" }
 
 exabgp_svc_uri: "https://raw.githubusercontent.com/Exa-Networks/exabgp/master/etc/systemd/exabgp.service"
 exabgp_config_path: "/etc/exabgp/exabgp.conf"

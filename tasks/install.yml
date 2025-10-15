@@ -50,6 +50,7 @@
         uv pip install {{ exabgp_pkg_version }}
       args:
         executable: /bin/bash
+      changed_when: false
       when:
         - ansible_distribution == 'Debian'
 
@@ -64,8 +65,8 @@
         path: "{{ item.item.name }}"
         state: directory
         mode: "{{ item.item.perms }}"
-        group: root
-        owner: root
+        group: "{{ item.item.group }}"
+        owner: "{{ item.item.owner }}"
       when: not item.stat.exists
       loop: "{{ folder_stats.results }}"
 
