@@ -9,7 +9,7 @@
 - name: "install and configure exabgp"
   block:
     - name: "exabgp: disable arp check kernel paramters"
-      sysctl:
+      ansible.posix.sysctl:
         name: net.ipv4.conf.all.arp_filter
         value: "1"
         state: present
