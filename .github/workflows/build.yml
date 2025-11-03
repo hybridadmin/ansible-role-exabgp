@@ -6,8 +6,8 @@ jobs:
   run_linting:
     uses: hybridadmin/reuse-workflows/.github/workflows/linting.yml@main
     secrets: inherit
-    with:
-      working_directory: 'hybridadmin.exabgp'
+#    with:
+#      working_directory: 'hybridadmin.exabgp'
 
   run_molecule_test:
     needs:
