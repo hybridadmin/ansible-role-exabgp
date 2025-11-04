@@ -1,13 +1,7 @@
----
 dependency:
   name: galaxy
   options:
     ignore-errors: true
-#lint: |
-#  set -e
-#  python3 -m pip install -U pip yamllint ansible-lint
-#  yamllint .
-#  ansible-lint .
 driver:
   name: docker
 platforms:
