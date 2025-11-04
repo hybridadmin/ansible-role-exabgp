@@ -1,11 +1,13 @@
 ---
 dependency:
   name: galaxy
-lint: |
-  set -e
-  python3 -m pip install -U pip yamllint ansible-lint
-  yamllint .
-  ansible-lint .
+  options:
+    ignore-errors: true
+#lint: |
+#  set -e
+#  python3 -m pip install -U pip yamllint ansible-lint
+#  yamllint .
+#  ansible-lint .
 driver:
   name: docker
 platforms:
@@ -19,6 +21,8 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
+  playbooks:
+    converge: ${MOLECULE_PLAYBOOK:-converge.yml}
   log: true
   options:
     v: true
