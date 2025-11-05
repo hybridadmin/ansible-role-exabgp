@@ -2,12 +2,9 @@
 - name: Load in project specific vars
   include_vars: "../vars/main.yml"
 
-- name: exabgp set required directories
-  set_fact:
+- name: exabgp set required vars
+  ansible.builtin.set_fact:
     required_dirs: "{{ exabgp_dirs }}"
-
-- name: exabgp set required templates
-  set_fact:
     required_tpls: "{{ exabgp_templates }}"
 
 - name: Redhat | Enable EPEL rpm repo
