@@ -1,10 +1,10 @@
 ---
 
-- name: Install dnsutils
-  when: ansible_os_family == 'Debian'
-  package:
-    name: dnsutils
-    state: present
+#- name: Install dnsutils
+#  when: ansible_os_family == 'Debian'
+#  package:
+#    name: dnsutils
+#    state: present
 
 - name: "install and configure exabgp"
   block:
@@ -75,6 +75,7 @@
         url: "{{ exabgp_svc_uri }}"
         dest: "{{ exabgp_svc_path }}"
         mode: "0644"
+      changed_when: false
 
     - name: "exabgp: get executable"
       ansible.builtin.shell: |
@@ -91,6 +92,7 @@
         path: "{{ exabgp_svc_path }}"
         regexp: '/usr/sbin/exabgp'
         replace: '{{ exabgp_which.stdout }}'
+      changed_when: false
 
     - name: "template: create configuration file"
       ansible.builtin.template:
@@ -164,4 +166,4 @@
       ignore_errors: "{{ ansible_check_mode }}"
       changed_when: false
 
-  when: pip_installed.rc == 0
+#  when: pip_installed.rc == 0
