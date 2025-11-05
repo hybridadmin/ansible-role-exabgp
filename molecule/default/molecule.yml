@@ -5,8 +5,8 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: ansible-role-${ROLE_NAME:-exabgp}-${MOLECULE_DISTRO:-ubuntu}-${MOLECULE_DISTRO_TAG:-focal}
-    image: "hybridadmin/ansible-${MOLECULE_DISTRO:-ubuntu}:${MOLECULE_DISTRO_TAG:-focal}"
+  - name: ${ROLE_NAME:-exabgp}-${MOLECULE_DISTRO:-ubuntu}-${MOLECULE_DISTRO_TAG:-jammy}
+    image: "hybridadmin/ansible-${MOLECULE_DISTRO:-ubuntu}:${MOLECULE_DISTRO_TAG:-jammy}"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     cgroupns_mode: host
     volumes:
@@ -20,12 +20,18 @@ provisioner:
   log: true
   options:
     v: true
-  config_options:
-    defaults:
-      callback_whitelist: profile_tasks
-      stdout_callback: yaml
-      bin_ansible_callbacks: yes
-      verbosity: 1
+#  config_options:
+#    defaults:
+#      callback_whitelist: ansible.builtin.default
+#      callback_result_format: yaml
+#      bin_ansible_callbacks: yes
+#      verbosity: 3
+#scenario:
+#  test_sequence:
+#    - create
+#    - converge
+#    - verify
+#    - destroy
 verifier:
   name: ansible
   enabled: False
