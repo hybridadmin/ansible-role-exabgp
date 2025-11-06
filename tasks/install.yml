@@ -77,21 +77,21 @@
         mode: "0644"
       changed_when: false
 
-    - name: "exabgp: get executable"
-      ansible.builtin.shell: |
-        set -o pipefail
-        which exabgp
-      args:
-        executable: /bin/bash
-      become: true
-      register: exabgp_which
-      changed_when: false
+#    - name: "exabgp: get executable"
+#      ansible.builtin.shell: |
+#        set -o pipefail
+#        which exabgp
+#      args:
+#        executable: /bin/bash
+#      become: true
+#      register: exabgp_which
+#      changed_when: false
 
     - name: "exabgp: set service exabgp path"
       ansible.builtin.replace:
         path: "{{ exabgp_svc_path }}"
         regexp: '/usr/sbin/exabgp'
-        replace: '{{ exabgp_which.stdout }}'
+        replace: '{{ exabgp_exec_path }}'
       changed_when: false
 
     - name: "template: create configuration file"
@@ -104,7 +104,11 @@
       loop: "{{ required_tpls }}"
 
     - name: "exabgp: generate environment configuration"
-      ansible.builtin.command: exabgp --fi > "{{ exabgp_env_path }}"
+      ansible.builtin.shell: |
+        set -o pipefail
+        {{ exabgp_exec_path }} --fi > "{{ exabgp_env_path }}"
+      args:
+        executable: /bin/bash
       become: true
       changed_when: false
 
@@ -149,7 +153,11 @@
       when: not ansible_check_mode and ansible_connection != "docker"
 
     - name: "exabgp: test configuration"
-      ansible.builtin.command: exabgp --test "{{ exabgp_config_path }}"
+      ansible.builtin.shell: |
+        set -o pipefail
+        {{ exabgp_exec_path }} --test "{{ exabgp_config_path }}"
+      args:
+        executable: /bin/bash
       register: exabgp_test
       ignore_errors: true
       changed_when: false

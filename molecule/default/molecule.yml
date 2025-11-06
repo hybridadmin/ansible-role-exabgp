@@ -20,12 +20,12 @@ provisioner:
   log: true
   options:
     v: true
-#  config_options:
-#    defaults:
+  config_options:
+    defaults:
 #      callback_whitelist: ansible.builtin.default
 #      callback_result_format: yaml
 #      bin_ansible_callbacks: yes
-#      verbosity: 3
+      verbosity: 1
 #scenario:
 #  test_sequence:
 #    - create
