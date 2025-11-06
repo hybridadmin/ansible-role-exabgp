@@ -23,6 +23,8 @@ jobs:
             tag: jammy
           - image: debian
             tag: 12
+          - image: debian
+            tag: 13
     uses: hybridadmin/reuse-workflows/.github/workflows/molecule.yml@main
     secrets: inherit
     with:
