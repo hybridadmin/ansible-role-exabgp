@@ -6,7 +6,7 @@
 - name: Add dir to system-wide $PATH.
   copy:
     dest: /etc/profile.d/custom-path.sh
-    content: 'PATH=$PATH:{{ user_bin_dir }}'
+    content: 'PATH=$PATH:{{ user_bin_dir }}:$HOME/.local/bin'
     mode: 0644
 
 - name: exabgp set required vars

@@ -44,6 +44,8 @@
         uv pip install {{ exabgp_pkg_version }}
       args:
         executable: /bin/bash
+      environment:
+        PATH: '{{ user_bin_dir }}:{{ ansible_env.PATH }}:$HOME/.local/bin'
       changed_when: false
       when:
         - ansible_os_family == 'Debian'
