@@ -2,8 +2,16 @@
 
 user_bin_dir: "/root/.venv/bin"
 
-required_packages:
-  - curl
+_required_packages:
+  default:
+    - python3-pip
+    - curl
+  Debian:
+    - python3
+  RedHat:
+    - python3
+
+required_packages: "{{ _required_packages['default'] + _required_packages[ansible_os_family] }}"
 
 exabgp_pkg_version: "{% if exabgp_version is defined %}exabgp=={{ exabgp_version }}{% else %}exabgp{% endif %}"
 
@@ -47,16 +55,6 @@ new_env_params:
       option: "destination",
       value: "/var/log/exabgp.log",
     }
-
-_python_requirements:
-  default:
-    - python3-pip
-  Debian:
-    - python3
-  RedHat:
-    - python3
-
-python_requirements: "{{ _python_requirements['default'] + _python_requirements[ansible_os_family] }}"
 
 pip_packages:
   - pip

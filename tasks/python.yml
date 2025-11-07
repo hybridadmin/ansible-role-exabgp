@@ -1,16 +1,5 @@
 ---
 
-- name: "latest python3 most distros"
-  block:
-    - name: install python3 and pip3
-      ansible.builtin.package:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - "{{ python_requirements }}"
-
-  when: not (ansible_distribution == 'Ubuntu')
-
 - name: get python executable
   ansible.builtin.shell: |
     set -o pipefail
