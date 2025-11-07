@@ -83,6 +83,8 @@
         which exabgp
       args:
         executable: /bin/bash
+      environment:
+        PATH: '{{ user_bin_dir }}:{{ ansible_env.PATH }}'
       become: true
       register: exabgp_which
       changed_when: false
