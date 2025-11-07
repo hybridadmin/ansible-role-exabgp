@@ -42,7 +42,7 @@
       changed_when: false
       when:
         - python3_which is defined
-        - ansible_distribution != 'Debian'
+        - ansible_os_family != 'Debian'
 
     - name: "exabgp: install for user"
       ansible.builtin.shell: |
@@ -52,7 +52,7 @@
         executable: /bin/bash
       changed_when: false
       when:
-        - ansible_distribution == 'Debian'
+        - ansible_os_family == 'Debian'
 
     - name: "exabgp: checking directories exist"
       ansible.builtin.stat:

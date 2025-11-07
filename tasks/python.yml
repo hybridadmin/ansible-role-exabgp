@@ -50,7 +50,7 @@
   changed_when: false
   register: pip_installed
   when:
-    - ansible_distribution == 'Debian'
+    - ansible_os_family == 'Debian'
 
 - name: "python: install using uv venv"
   ansible.builtin.shell: |
@@ -62,4 +62,4 @@
     executable: /bin/bash
   changed_when: false
   when:
-    - ansible_distribution == 'Debian'
+    - ansible_os_family == 'Debian'
