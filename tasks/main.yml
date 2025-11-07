@@ -6,6 +6,7 @@
   copy:
     dest: /etc/profile.d/custom-path.sh
     content: 'PATH=$PATH:{{ user_bin_dir }}'
+    mode: 0644
 
 - name: exabgp set required vars
   ansible.builtin.set_fact:
