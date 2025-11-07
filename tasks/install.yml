@@ -77,21 +77,21 @@
         mode: "0644"
       changed_when: false
 
-#    - name: "exabgp: get executable"
-#      ansible.builtin.shell: |
-#        set -o pipefail
-#        which exabgp
-#      args:
-#        executable: /bin/bash
-#      become: true
-#      register: exabgp_which
-#      changed_when: false
+    - name: "exabgp: get executable"
+      ansible.builtin.shell: |
+        set -o pipefail
+        which exabgp
+      args:
+        executable: /bin/bash
+      become: true
+      register: exabgp_which
+      changed_when: false
 
     - name: "exabgp: set service exabgp path"
       ansible.builtin.replace:
         path: "{{ exabgp_svc_path }}"
         regexp: '/usr/sbin/exabgp'
-        replace: '{{ exabgp_exec_path }}'
+        replace: '{{ exabgp_which.stdout }}'
       changed_when: false
 
     - name: "template: create configuration file"
@@ -106,7 +106,7 @@
     - name: "exabgp: generate environment configuration"
       ansible.builtin.shell: |
         set -o pipefail
-        {{ exabgp_exec_path }} --fi > "{{ exabgp_env_path }}"
+        {{ exabgp_which.stdout }} --fi > "{{ exabgp_env_path }}"
       args:
         executable: /bin/bash
       become: true
@@ -120,6 +120,7 @@
         value: "{{ item.value }}"
         mode: "0644"
       loop: "{{ new_env_params }}"
+      changed_when: false
 
     - name: "exabgp: service starup user fix"
       ansible.builtin.blockinfile:
@@ -129,6 +130,7 @@
         block: |
           [exabgp.daemon]
           user=root
+      changed_when: false
 
     - name: "exabgp: created named pipes for cli"
       ansible.builtin.shell: |
@@ -155,7 +157,7 @@
     - name: "exabgp: test configuration"
       ansible.builtin.shell: |
         set -o pipefail
-        {{ exabgp_exec_path }} --test "{{ exabgp_config_path }}"
+        {{ exabgp_which.stdout }} --test "{{ exabgp_config_path }}"
       args:
         executable: /bin/bash
       register: exabgp_test

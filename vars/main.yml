@@ -1,5 +1,7 @@
 ---
 
+user_bin_dir: "/root/.venv/bin"
+
 exabgp_pkg_version: "{% if exabgp_version is defined %}exabgp=={{ exabgp_version }}{% else %}exabgp{% endif %}"
 
 exabgp_dirs:
@@ -12,7 +14,7 @@ exabgp_config_path: "/etc/exabgp/exabgp.conf"
 exabgp_svc_path: "/etc/systemd/system/exabgp.service"
 exabgp_process_cfg: "/etc/exabgp/process.conf"
 
-exabgp_exec_path: "/root/.venv/bin/exabgp"
+#exabgp_exec_path: "/root/.venv/bin/exabgp"
 
 _exabgp_env_path:
   Debian:

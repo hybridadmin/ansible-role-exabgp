@@ -2,6 +2,11 @@
 - name: Load in project specific vars
   include_vars: "../vars/main.yml"
 
+- name: Add dir to system-wide $PATH.
+  copy:
+    dest: /etc/profile.d/custom-path.sh
+    content: 'PATH=$PATH:{{ user_bin_dir }}'
+
 - name: exabgp set required vars
   ansible.builtin.set_fact:
     required_dirs: "{{ exabgp_dirs }}"

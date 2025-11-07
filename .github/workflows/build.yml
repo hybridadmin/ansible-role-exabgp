@@ -15,8 +15,6 @@ jobs:
       max-parallel: 4
       matrix:
         distro:
-          - image: centos
-            tag: 8
           - image: ubuntu
             tag: noble
           - image: ubuntu
