@@ -41,7 +41,7 @@
     - name: "exabgp: install for user"
       ansible.builtin.shell: |
         set -o pipefail
-        source ~/.bashrc
+        source $HOME/.local/bin/env bash
         uv pip install {{ exabgp_pkg_version }}
       args:
         executable: /bin/bash

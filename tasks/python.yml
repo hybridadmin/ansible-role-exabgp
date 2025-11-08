@@ -45,7 +45,7 @@
 - name: "python: install using uv venv"
   ansible.builtin.shell: |
     set -o pipefail
-    source ~/.bashrc
+    source $HOME/.local/bin/env bash
     uv venv
     uv pip install --upgrade setuptools
     #source ~/.venv/bin/activate
