@@ -33,7 +33,6 @@
   ansible.builtin.shell: |
     set -o pipefail
     curl -LsSf https://astral.sh/uv/install.sh | sh
-    #echo "export PATH='${PATH}:$HOME/.local/bin'"
     source ~/.bashrc
   args:
     executable: /bin/bash
@@ -46,13 +45,10 @@
   ansible.builtin.shell: |
     set -o pipefail
     source $HOME/.local/bin/env bash
-    uv venv
+    cd $HOME && uv venv
     uv pip install --upgrade setuptools
-    #source ~/.venv/bin/activate
   args:
     executable: /bin/bash
-#  environment:
-#    PATH: '{{ user_bin_dir }}:{{ ansible_env.PATH }}:$HOME/.local/bin'
   changed_when: false
   when:
     - ansible_os_family == 'Debian'
