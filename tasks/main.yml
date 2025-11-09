@@ -1,20 +1,29 @@
 ---
+
 - name: Load in project specific vars
   include_vars: "../vars/main.yml"
 
-- name: exabgp set required directories
-  set_fact:
-    required_dirs: "{{ exabgp_dirs }}"
+- name: Add dir to system-wide $PATH.
+  copy:
+    dest: /etc/profile.d/custom-path.sh
+    content: 'PATH=$PATH:{{ user_bin_dir }}:$HOME/.local/bin'
+    mode: 0644
 
-- name: exabgp set required templates
-  set_fact:
+- name: exabgp set required vars
+  ansible.builtin.set_fact:
+    required_dirs: "{{ exabgp_dirs }}"
     required_tpls: "{{ exabgp_templates }}"
 
-- name: Redhat | Enable EPEL rpm repo
-  action: >
-    {{ ansible_pkg_mgr }} name=epel-release state=present update_cache=yes
-  become: yes
-  when: (ansible_os_family == 'RedHat' and ansible_distribution_major_version == "7")
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 600
+  when: ansible_os_family == 'Debian'
+
+- name: Install required packages
+  ansible.builtin.package:
+    name: "{{ required_packages }}"
+    state: present
 
 - name: Python3 Install
   include_tasks:

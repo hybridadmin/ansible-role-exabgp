@@ -12,9 +12,12 @@ galaxy_info:
         - focal
         - jammy
         - noble
+    - name: Debian
+      versions:
+        - bookworm
+        - trixie
     - name: EL
       versions:
-        - 7
         - 8
   galaxy_tags:
     - exabgp

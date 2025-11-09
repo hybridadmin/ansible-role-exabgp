@@ -1,15 +1,9 @@
 ---
 
-- name: Install dnsutils
-  when: ansible_os_family == 'Debian'
-  package:
-    name: dnsutils
-    state: present
-
 - name: "install and configure exabgp"
   block:
     - name: "exabgp: disable arp check kernel paramters"
-      sysctl:
+      ansible.posix.sysctl:
         name: net.ipv4.conf.all.arp_filter
         value: "1"
         state: present
@@ -17,7 +11,7 @@
       register: install_cmd
 
     - name: "exabgp: configure router advertisements kernel paramters"
-      sysctl:
+      ansible.posix.sysctl:
         name: "net.ipv6.conf.{{ item }}.accept_ra"
         value: "0"
         state: present
@@ -29,12 +23,12 @@
       register: configure_ra
 
     - name: "exabgp: create user"
-      user:
+      ansible.builtin.user:
         name: exabgp
         comment: "ExaBGP"
 
-    - name: "exabgp: install from pip"
-      shell: |
+    - name: "exabgp: install for root"
+      ansible.builtin.shell: |
         set -o pipefail
         {{ python3_which.stdout }} -m pip install {{ exabgp_pkg_version }}
       args:
@@ -42,44 +36,65 @@
       changed_when: false
       when:
         - python3_which is defined
+        - ansible_os_family != 'Debian'
+
+    - name: "exabgp: install for user"
+      ansible.builtin.shell: |
+        set -o pipefail
+        source $HOME/.local/bin/env bash
+        uv pip install {{ exabgp_pkg_version }}
+      args:
+        executable: /bin/bash
+      environment:
+        PATH: '{{ user_bin_dir }}:{{ ansible_env.PATH }}:$HOME/.local/bin'
+      changed_when: false
+      when:
+        - ansible_os_family == 'Debian'
 
     - name: "exabgp: checking directories exist"
-      stat:
+      ansible.builtin.stat:
         path: "{{ item }}"
       register: folder_stats
       loop: "{{ required_dirs }}"
 
     - name: "exabgp: creating required directories"
-      file:
+      ansible.builtin.file:
         path: "{{ item.item.name }}"
         state: directory
         mode: "{{ item.item.perms }}"
-        group: root
-        owner: root
+        group: "{{ item.item.group }}"
+        owner: "{{ item.item.owner }}"
       when: not item.stat.exists
       loop: "{{ folder_stats.results }}"
 
     - name: "exabgp: install service"
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ exabgp_svc_uri }}"
         dest: "{{ exabgp_svc_path }}"
         mode: "0644"
+      changed_when: false
 
-    - name: "exabgp: service fixes - bionic"
-      when: ansible_distribution_release is regex('bionic')
-      shell: |
+    - name: "exabgp: get executable"
+      ansible.builtin.shell: |
         set -o pipefail
-        sed -i -e 's/chown/\/bin\/chown/g' \
-            -e 's/chmod/\/bin\/chmod/g' \
-            -e 's/mkfifo/\/usr\/bin\/mkfifo/g' \
-            -e 's/ExecStart=\/usr\/sbin/ExecStart=\/usr\/local\/bin/g' /etc/systemd/system/exabgp.service
+        which exabgp
       args:
         executable: /bin/bash
-      check_mode: false
+      environment:
+        PATH: '{{ user_bin_dir }}:{{ ansible_env.PATH }}'
+      become: true
+      register: exabgp_which
+      changed_when: false
+
+    - name: "exabgp: set service exabgp path"
+      ansible.builtin.replace:
+        path: "{{ exabgp_svc_path }}"
+        regexp: '/usr/sbin/exabgp'
+        replace: '{{ exabgp_which.stdout }}'
       changed_when: false
 
     - name: "template: create configuration file"
-      template:
+      ansible.builtin.template:
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
         # owner: "{{ item.owner }}"
@@ -88,31 +103,36 @@
       loop: "{{ required_tpls }}"
 
     - name: "exabgp: generate environment configuration"
-      command: exabgp --fi > "{{ exabgp_env_path }}"
+      ansible.builtin.shell: |
+        set -o pipefail
+        {{ exabgp_which.stdout }} --fi > "{{ exabgp_env_path }}"
+      args:
+        executable: /bin/bash
       become: true
       changed_when: false
 
     - name: "exabgp: edit env params"
-      ini_file:
+      community.general.ini_file:
         path: "{{ exabgp_env_path }}"
         section: "{{ item.section }}"
         option: "{{ item.option }}"
         value: "{{ item.value }}"
         mode: "0644"
       loop: "{{ new_env_params }}"
+      changed_when: false
 
     - name: "exabgp: service starup user fix"
-      when: ansible_distribution_release is regex('bionic')
-      blockinfile:
+      ansible.builtin.blockinfile:
         path: "{{ exabgp_env_path }}"
         append_newline: true
         prepend_newline: true
         block: |
           [exabgp.daemon]
           user=root
+      changed_when: false
 
     - name: "exabgp: created named pipes for cli"
-      shell: |
+      ansible.builtin.shell: |
         set -o pipefail
         mkfifo /run/exabgp.{in,out}
         chmod 600 /run/exabgp.{in,out}
@@ -123,7 +143,7 @@
       changed_when: false
 
     - name: "exabgp: add loopback device fix"
-      lineinfile:
+      ansible.builtin.lineinfile:
         create: true
         path: /etc/sudoers.d/exabgp
         state: present
@@ -134,13 +154,17 @@
       when: not ansible_check_mode and ansible_connection != "docker"
 
     - name: "exabgp: test configuration"
-      command: exabgp --test "{{ exabgp_config_path }}"
+      ansible.builtin.shell: |
+        set -o pipefail
+        {{ exabgp_which.stdout }} --test "{{ exabgp_config_path }}"
+      args:
+        executable: /bin/bash
       register: exabgp_test
       ignore_errors: true
       changed_when: false
 
     - name: "exabgp: start service"
-      systemd:
+      ansible.builtin.systemd:
         state: started
         daemon_reload: true
         name: exabgp
@@ -151,4 +175,4 @@
       ignore_errors: "{{ ansible_check_mode }}"
       changed_when: false
 
-  when: pip_installed.rc == 0
+#  when: pip_installed.rc == 0

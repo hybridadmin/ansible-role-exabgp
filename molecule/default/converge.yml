@@ -5,7 +5,7 @@
   any_errors_fatal: true
 
   vars:
-    exabgp_version: 4.2.22
+    exabgp_version: 4.2.25
     bgp_neighbors:
       - { ip: 192.168.50.10, desc: "r2" }
     local_as: 65340
@@ -18,10 +18,10 @@
         cidr: 192.168.59.189/32
     test_cmd: "dig +notcp +timeout=1 +tries=1 +short @127.0.0.1 a.root-servers.net"
 
-  pre_tasks:
-    - name: Update apt cache.
-      apt: update_cache=yes cache_valid_time=600
-      when: ansible_os_family == 'Debian'
+#  pre_tasks:
+#    - name: Update apt cache.
+#      apt: update_cache=yes cache_valid_time=600
+#      when: ansible_os_family == 'Debian'
 
   roles:
     - role: hybridadmin.exabgp

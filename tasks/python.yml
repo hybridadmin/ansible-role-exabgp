@@ -1,17 +1,7 @@
 ---
-- name: "latest python3 all other distros"
-  block:
-    - name: install python3 and pip3
-      package:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - "{{ python_requirements }}"
-
-  when: not (ansible_distribution == 'Ubuntu')
 
 - name: get python executable
-  shell: |
+  ansible.builtin.shell: |
     set -o pipefail
     ls -l /usr/bin/python3.* | grep -E "python[0-9].[0-9]{1,2}$" | awk '{print $9}' | tail -n1
   args:
@@ -19,10 +9,12 @@
   become: true
   register: python3_which
   changed_when: false
+  when:
+    - ansible_distribution != 'Debian'
 
 # https://github.com/pypa/pip/issues/5599
 - name: "python3: upgrade pip"
-  shell: |
+  ansible.builtin.shell: |
     set -o pipefail
     if [[ "{{ ansible_distribution_release }}" =~ (bookworm|noble) ]]; then
         echo "pip installed via package so skipping upgrade for ansible_distribution_release {{ ansible_distribution_release }}"
@@ -33,4 +25,30 @@
     executable: /bin/bash
   changed_when: false
   register: pip_installed
+  when:
+    - ansible_distribution != 'Debian'
 #  when: not(ansible_distribution_release is regex('bookworm|noble'))
+
+- name: "python: install using uv"
+  ansible.builtin.shell: |
+    set -o pipefail
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    source ~/.bashrc
+  args:
+    executable: /bin/bash
+  changed_when: false
+  register: pip_installed
+  when:
+    - ansible_os_family == 'Debian'
+
+- name: "python: install using uv venv"
+  ansible.builtin.shell: |
+    set -o pipefail
+    source $HOME/.local/bin/env bash
+    cd $HOME && uv venv
+    uv pip install --upgrade setuptools
+  args:
+    executable: /bin/bash
+  changed_when: false
+  when:
+    - ansible_os_family == 'Debian'

@@ -1,16 +1,43 @@
 ---
 
+user_bin_dir: "/root/.venv/bin"
+
+_required_packages:
+  default:
+    - python3-pip
+    - curl
+  Debian:
+    - python3
+  RedHat:
+    - python3
+
+required_packages: "{{ _required_packages['default'] + _required_packages[ansible_os_family] }}"
+
 exabgp_pkg_version: "{% if exabgp_version is defined %}exabgp=={{ exabgp_version }}{% else %}exabgp{% endif %}"
 
 exabgp_dirs:
-  - { name: "/etc/exabgp", perms: "0754" }
-  - { name: "/usr/local/etc/exabgp", perms: "0754" }
+  - { name: "/etc/exabgp", owner: "root", group: "root", perms: "0754" }
+  - { name: "/usr/local/etc/exabgp", owner: "root", group: "root", perms: "0754" }
+  - { name: "/run/exabgp", owner: "exabgp", group: "exabgp", perms: "0754" }
 
 exabgp_svc_uri: "https://raw.githubusercontent.com/Exa-Networks/exabgp/master/etc/systemd/exabgp.service"
-exabgp_env_path: "/usr/local/etc/exabgp/exabgp.env"
 exabgp_config_path: "/etc/exabgp/exabgp.conf"
 exabgp_svc_path: "/etc/systemd/system/exabgp.service"
 exabgp_process_cfg: "/etc/exabgp/process.conf"
+
+#exabgp_exec_path: "/root/.venv/bin/exabgp"
+
+_exabgp_env_path:
+  Debian:
+    '12': "/usr/local/etc/exabgp/exabgp.env"
+    '13': "/root/.venv/etc/exabgp/exabgp.env"
+  Ubuntu:
+    '22': "/usr/local/etc/exabgp/exabgp.env"
+    '24': "/usr/local/etc/exabgp/exabgp.env"
+  RedHat:
+    '8': "/usr/local/etc/exabgp/exabgp.env"
+
+exabgp_env_path:  "{{ _exabgp_env_path[ansible_distribution][ansible_distribution_major_version] }}"
 
 exabgp_templates:
   - {
@@ -28,16 +55,6 @@ new_env_params:
       option: "destination",
       value: "/var/log/exabgp.log",
     }
-
-_python_requirements:
-  default:
-    - python3-pip
-  Debian:
-    - python3
-  RedHat:
-    - python3
-
-python_requirements: "{{ _python_requirements['default'] + _python_requirements[ansible_os_family] }}"
 
 pip_packages:
   - pip
